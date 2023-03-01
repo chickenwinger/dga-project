@@ -14,7 +14,7 @@
 
 <body class="bg-primary-400">
     <div class="login-form">
-        <form class="even-columns bg-accent-400">
+        <form class="even-columns bg-accent-400" method="POST" action="{{url_for('registration')}}">
             <div>
                 <div class="form-image">
                     <img src="static/images/index.jpg" alt="">
@@ -31,27 +31,31 @@
                     <div class="label">
                         <label for="email">Email</label>
                     </div>
-                    <input type="text" id="email">
+                    <input type="text" id="email" name="email">
                 </div>
                 <div class="input">
                     <div class="label">
                         <label for="password">Password</label>
                     </div>
-                    <input type="password" id="password" required minlength="4" placeholder="4 characters minimum">
+                    <input type="password" id="password" name="password" required minlength="7" placeholder="7 characters minimum">
                     <span class="validity"></span>
                 </div>
                 <div class="input">
                     <div class="label">
                         <label for="password">Confirmed Password</label>
                     </div>
-                    <input type="password" id="password" required minlength="4" placeholder="4 characters minimum">
+                    <input type="password" id="password" name="cpassword" required minlength="7" placeholder="7 characters minimum">
                     <span class="validity"></span>
+                </div>
+                <div>
+									{% include 'flash_messages.html' %}
                 </div>
                 <div class="form-button">
                     <button class="button" type="submit">Register</button>
+
                 </div>
                 <div>
-                    <a href="/" class="fs-300 fw-semi-bold text-primary-900">Sign in here</a>
+                    <a href="{{ url_for('login') }}" class="fs-300 fw-semi-bold text-primary-900">Sign in here</a>
                 </div>
             </div>
         </form>
@@ -59,7 +63,6 @@
 
 
     
-    <script src="scripts.js"></script>
 </body>
 
 </html>

@@ -20,14 +20,15 @@
         <ul class="text-neutral-100 fw-semi-bold fs-600">
           <li><a href="{{ url_for('home') }}">Home</a></li>
           <li><a href="{{ url_for('records') }}">Records</a></li>
+          <li><a href="{{ url_for('login') }}">Logout</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
   <main>
-    <div class="container">
-      <form class="even-columns">
+    <div class="container bg-accent-400">
+      <form class="even-columns" method="POST">
         <div class="input-wrap dga">
 					<div class="fs-secondary-heading fw-semi-bold">
 						<p>Input the following DGA values</p>
@@ -110,9 +111,7 @@
 						</select>
 					</div>
 					<div class="image-frame">
-						<output name="image">
-							<img src="" alt="DGA tool">
-						</output>
+						{% include 'imagedisplay.html' %}
 					</div>
 					<div class="fs-400 fw-semi-bold">
 						Type of fault: <output name="fault"></output>
@@ -124,7 +123,6 @@
 
 
 
-  <script src="scripts.js"></script>
 </body>
 
 </html>

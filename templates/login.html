@@ -14,7 +14,7 @@
 
 <body class="bg-primary-400">
     <div class="login-form">
-        <form class="even-columns bg-accent-400">
+        <form class="even-columns bg-accent-400" method="POST">
             <div>
                 <div class="form-image">
                     <img src="static/images/index.jpg" alt="DGA 4 U">
@@ -31,29 +31,31 @@
                     <div class="label">
                         <label for="email">Email</label>
                     </div>
-                    <input type="text" id="email">
+                    <input type="text" id="email" name="email">
                 </div>
                 <div class="input">
                     <div class="label">
                         <label for="password">Password</label>
                     </div>
-                    <input type="password" id="password" required minlength="4" placeholder="4 characters minimum">
+                    <input type="password" id="password" name="password" required minlength="4" placeholder="4 characters minimum">
                     <span class="validity"></span>
                 </div>
+								<div>
+									{% include 'flash_messages.html' %}
+								</div>
                 <div class="form-button">
                     <button class="button" type="submit">Login</button>
-                    <button class="button" data-type="inverted" formnovalidate><a href="registration">Register</a></button>
+                    <button class="button" data-type="inverted" formnovalidate><a href="{{ url_for('registration') }}">Register</a></button>
                 </div>
-                <div>
+                <!-- <div>
                     <a href="#" class="fs-300 fw-semi-bold text-primary-900">Forgot your password?</a>
-                </div>
+                </div> -->
             </div>
         </form>
     </div>
 
 
     
-    <script src="scripts.js"></script>
 </body>
 
 </html>

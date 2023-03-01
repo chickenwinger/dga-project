@@ -109,31 +109,28 @@ svg {
 .text-primary-900 {
   color: var(--clr-neutral-900);
 }
-
 .text-neutral-100 {
   color: var(--clr-neutral-100);
 }
-
 .text-neutral-300 {
   color: var(--clr-neutral-300);
+}
+.text-accent-400 {
+  color: var(--clr-accent-400);
 }
 
 .bg-primary-400 {
   background-color: var(--clr-primary-400);
 }
-
 .bg-accent-400 {
   background-color: var(--clr-accent-400);
 }
-
 .bg-accent-100 {
   background-color: var(--clr-accent-300);
 }
-
 .bg-neutral-100 {
   background-color: var(--clr-neutral-100);
 }
-
 .bg-neutral-300 {
   background-color: var(--clr-neutral-300);
 }
@@ -141,11 +138,9 @@ svg {
 .fw-bold {
   font-weight: var(--fw-bold);
 }
-
 .fw-semi-bold {
   font-weight: var(--fw-semi-bold);
 }
-
 .fw-regular {
   font-weight: var(--fw-regular);
 }
@@ -153,19 +148,15 @@ svg {
 .fs-primary-heading {
   font-size: var(--fs-primary-heading);
 }
-
 .fs-secondary-heading {
   font-size: var(--fs-secondary-heading);
 }
-
 .fs-300 {
   font-size: var(--fs-300);
 }
-
 .fs-400 {
   font-size: var(--fs-400);
 }
-
 .fs-600 {
   font-size: var(--fs-600);
 }
@@ -217,19 +208,16 @@ svg {
   gap: 16px;
   padding: 6rem;
 }
-
 .input {
   display: flex;
   flex-direction: column;
   position: relative;
   gap: 8px;
 }
-
 .input .label label {
   font-size: var(--fs-400);
   font-weight: var(--fw-semi-bold);
 }
-
 .input input {
   min-width: 345px;
   width: 100%;
@@ -239,7 +227,11 @@ svg {
   border-radius: 8px;
   overflow: hidden;
 }
-
+.even-columns .input-wrap.dga {
+  padding: 0;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
 input:invalid + span::after {
   position: absolute;
   content: "✖";
@@ -247,7 +239,6 @@ input:invalid + span::after {
   bottom: .8rem;
   left: 100%;
 }
-
 input:valid + span::after {
   position: absolute;
   content: "✓";
@@ -265,6 +256,30 @@ input:valid + span::after {
   width: 90%;
 }
 
+.image-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 6rem;
+}
+.image-wrap img {
+  width: 100%;
+  max-width: 640px;
+  height: auto;
+}
+
+.msg {
+  color: green;
+  font-size: var(--fs-400);
+  font-weight: var(--fw-semi-bold);
+  align-items: flex-start;
+}
+.error {
+  color: firebrick;
+  font-size: var(--fs-400);
+  font-weight: var(--fw-semi-bold);
+  align-items: flex-start;
+}
 
 /* general styles */
 
@@ -273,7 +288,6 @@ body {
   font-family: var(--ff-body);
   color: var(--clr-neutral-900);
 }
-
 
 /* button styles */
 
@@ -288,6 +302,11 @@ body {
   border-radius: 32px;
 }
 
+.button a {
+  text-decoration: none;
+  color: var(--clr-primary-400);
+}
+
 .button[data-type="inverted"] {
   background-color: var(--clr-neutral-100);
 }
@@ -300,4 +319,90 @@ body {
 .button[data-type="inverted"]:is(:hover, :focus-visible) {
   cursor: pointer;
   background-color: var(--clr-accent-100);
+}
+
+
+/* navigation styles */
+
+nav {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 64px;
+  padding: 0, 5rem;
+  align-items: center;
+  gap: 2rem;
+  
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+nav p {
+  margin: 2rem;
+  white-space: nowrap;
+}
+
+nav ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  display: flex;
+  gap: 2rem;
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--clr-accent-400);
+}
+
+nav a:hover {
+  color: var(--clr-neutral-300);
+}
+
+
+/* selectbox styles */
+
+.select,
+.select * {
+  position: relative;
+  box-sizing: border-box;
+}
+
+.select {
+  position: relative;
+  background-color: var(--clr-neutral-100);
+  border-radius: 4px;
+  box-shadow: 0px 2px 10px 1px rgba(0, 0, 0, 0.25);
+  width: 245px;
+}
+
+select {
+  font-size: 1rem;
+  font-weight: normal;
+  max-width: 100%;
+  padding: 8px 24px 8px 10px;
+  border: none;
+  background-color: transparent;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  appearance: none;
+}
+
+.select select:active, .select select:focus {
+  outline: none;
+  box-shadow: none;
+  width: 100%;
+}
+
+.select:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  width: 0;
+  height: 0;
+  margin-top: -2px;
+  border-top: 5px solid #aaa;
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
 }
