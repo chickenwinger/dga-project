@@ -37,18 +37,20 @@
                     <div class="label">
                         <label for="password">Password</label>
                     </div>
-                    <input type="password" id="password" name="password" required minlength="7" placeholder="7 characters minimum">
+                    <input type="password" id="password" name="password" required minlength="7"
+                        placeholder="7 characters minimum">
                     <span class="validity"></span>
                 </div>
                 <div class="input">
                     <div class="label">
                         <label for="password">Confirmed Password</label>
                     </div>
-                    <input type="password" id="password" name="cpassword" required minlength="7" placeholder="7 characters minimum">
+                    <input type="password" id="cpassword" name="cpassword" required minlength="7"
+                        placeholder="7 characters minimum">
                     <span class="validity"></span>
                 </div>
                 <div>
-									{% include 'flash_messages.html' %}
+                    {% include 'flash_messages.html' %}
                 </div>
                 <div class="form-button">
                     <button class="button" type="submit">Register</button>
@@ -62,7 +64,7 @@
     </div>
 
 
-    
+
 </body>
 
 </html>
