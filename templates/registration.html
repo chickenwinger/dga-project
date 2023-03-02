@@ -14,7 +14,7 @@
 
 <body class="bg-primary-400">
     <div class="login-form">
-        <form class="even-columns bg-accent-400" method="POST" action="{{url_for('registration')}}">
+        <form class="even-columns bg-accent-400" method="POST">
             <div>
                 <div class="form-image">
                     <img src="static/images/index.jpg" alt="">
@@ -57,7 +57,7 @@
 
                 </div>
                 <div>
-                    <a href="{{ url_for('login') }}" class="fs-300 fw-semi-bold text-primary-900">Sign in here</a>
+                    <a href="{{ url_for('index') }}" class="fs-300 fw-semi-bold text-primary-900">Sign in here</a>
                 </div>
             </div>
         </form>
