@@ -1,6 +1,5 @@
 from flask import Flask, render_template, url_for, request, redirect, flash, session
 import pyrebase
-import time
 
 app = Flask(__name__)
 
@@ -24,26 +23,29 @@ app.secret_key = 'abc123'
 
 
 @app.route('/', methods=['GET', 'POST'])
-def login():
+def index():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
+        session.pop('_flashes', None) # clear flash messages 
 
         try:
-            auth.sign_in_with_email_and_password(email, password)
+            user = auth.sign_in_with_email_and_password(email, password)
             session['email'] = email
             return redirect(url_for('home'))
         except: # pylint: disable=W0702
             flash('Invalid username/password combination', 'error')
-            return redirect(url_for('login'))
+            return redirect(url_for('index'))
 
-    return render_template('login.html')
+    return render_template('index.html')
 
 
 @app.route('/logout')
 def logout():
-    session.pop('email')
-    return redirect(url_for('login'))
+    auth.sign_out()
+    session.pop('email', None)
+    print('User logged out')
+    return redirect(url_for('index'))
 
 
 @app.route('/registration', methods=['GET', 'POST'])
@@ -70,8 +72,8 @@ def registration():
                 return redirect(url_for('registration'))
 
             auth.create_user_with_email_and_password(email, password)
-            flash('Registration successful. You can login now', 'msg')
-            return redirect(url_for('login'))
+            flash('Registration successful. You can login now.', 'msg')
+            return redirect(url_for('index'))
         except: # pylint: disable=W0702
             flash('Email already exists', 'error')
             print('Email already exists', )
@@ -92,3 +94,4 @@ def records():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
