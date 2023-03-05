@@ -1,128 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <title>DGA 4 U</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
-  <title>DGA 4 U</title>
-</head>
+  <body>
+    <header class="header bg-primary-400">
+      <div class="container">
+        <nav class="nav-bar">
+          <div>
+            <p class="fs-primary-heading fw-bold text-accent-400">DGA 4 U</p>
+          </div>
+          <ul class="text-neutral-100 fw-semi-bold fs-600">
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('records') }}">Records</a></li>
+            <li><a href="{{ url_for('index') }}">Logout</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
 
-<body>
-  <header class="header bg-primary-400">
-    <div class="container">
-      <nav class="nav-bar">
-				<div><p class="fs-primary-heading fw-bold text-accent-400">DGA 4 U</p></div>
-        <ul class="text-neutral-100 fw-semi-bold fs-600">
-          <li><a href="{{ url_for('home') }}">Home</a></li>
-          <li><a href="{{ url_for('records') }}">Records</a></li>
-          <li><a href="{{ url_for('index') }}">Logout</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-  <main>
-    <div class="container bg-accent-400">
-      <form class="even-columns" method="POST">
-        <div class="input-wrap dga">
-					<div class="fs-secondary-heading fw-semi-bold">
-						<p>Input the following DGA values</p>
-					</div>
-          <div class="input">
-            <div class="label">
-							<label for="rname">Record Name</label>
-						</div>
-						<input type="text" id="rname" required>
-						<span class="validity"></span>
+    <main>
+      <div class="container bg-accent-400">
+        <form class="even-columns" method="POST">
+          <div class="input-wrap dga">
+            <div class="fs-secondary-heading fw-semi-bold">
+              <p>Input the following DGA values</p>
+            </div>
+            <div class="input">
+              <div class="label">
+                <label for="rname">Record Name</label>
+              </div>
+              <input type="text" id="rname" required />
+              <span class="validity"></span>
+            </div>
+            <div class="input">
+              <div class="label">
+                <label for="hydrogenconc">Hydrogen Concentration</label>
+              </div>
+              <input
+                type="text"
+                id="hydrogenconc"
+                required
+                pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
+                placeholder="Insert value 0-100"
+              />
+              <span class="validity"></span>
+            </div>
+            <div class="input">
+              <div class="label">
+                <label for="methaneconc">Methane Concentration</label>
+              </div>
+              <input
+                type="text"
+                id="methaneconc"
+                required
+                pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
+                placeholder="Insert value 0-100"
+              />
+              <span class="validity"></span>
+            </div>
+            <div class="input">
+              <div class="label">
+                <label for="acetyleneconc">Acetylene Concentration</label>
+              </div>
+              <input
+                type="text"
+                id="acetyleneconc"
+                required
+                pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
+                placeholder="Insert value 0-100"
+              />
+              <span class="validity"></span>
+            </div>
+            <div class="input">
+              <div class="label">
+                <label for="ethyleneconc">Ethylene Concentration</label>
+              </div>
+              <input
+                type="text"
+                id="ethyleneconc"
+                required
+                pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
+                placeholder="Insert value 0-100"
+              />
+              <span class="validity"></span>
+            </div>
+            <div class="input">
+              <div class="label">
+                <label for="ethaneconc">Ethane Concentration</label>
+              </div>
+              <input
+                type="text"
+                id="ethaneconc"
+                required
+                pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
+                placeholder="Insert value 0-100"
+              />
+              <span class="validity"></span>
+            </div>
+            <div class="input">
+              <div class="label">
+                <label for="cmonoxideconc">Carbon Monoxide Concentration</label>
+              </div>
+              <input
+                type="text"
+                id="cmonoxideconc"
+                required
+                pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
+                placeholder="Insert value 0-100"
+              />
+              <span class="validity"></span>
+            </div>
+            <div class="input">
+              <div class="label">
+                <label for="cdioxideconc">Carbon Dioxide Concentration</label>
+              </div>
+              <input
+                type="text"
+                id="cdioxideconc"
+                required
+                pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
+                placeholder="Insert value 0-100"
+              />
+              <span class="validity"></span>
+            </div>
+            <div class="input">
+              <div class="label">
+                <label for="totalcombustibles"
+                  >Total Dissolve Combustibles</label
+                >
+              </div>
+              <input
+                type="text"
+                id="totalcombustibles"
+                required
+                pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
+                placeholder="Insert value 0-100"
+              />
+              <span class="validity"></span>
+            </div>
+            <div>
+              <button class="button" type="submit">Record</button>
+            </div>
           </div>
-          <div class="input">
-            <div class="label">
-							<label for="hydrogenconc">Hydrogen Concentration</label>
-						</div>
-						<input type="text" id="hydrogenconc" required pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$" placeholder="Insert value 1-100">
-						<span class="validity"></span>
+          <div class="image-wrap">
+            <div class="select">
+              <select id="selection" onchange="showImage()">
+                <option value="triange1">Duval Triangle 1</option>
+                <option value="triange4">Duval Triangle 4</option>
+                <option value="triange5">Duval Triangle 5</option>
+                <option value="pentagon1">Duval Pentagon 1</option>
+                <option value="pentagon2">Duval Pentagon 2</option>
+              </select>
+            </div>
+            <div class="image-frame">{% include 'imagedisplay.html' %}</div>
+            <div class="fs-400 fw-semi-bold">
+              Type of fault: <output name="fault"></output>
+            </div>
           </div>
-          <div class="input">
-            <div class="label">
-							<label for="methaneconc">Methane Concentration</label>
-						</div>
-						<input type="text" id="methaneconc" required pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$" placeholder="Insert value 1-100">
-						<span class="validity"></span>
-          </div>
-          <div class="input">
-            <div class="label">
-							<label for="acetyleneconc">Acetylene Concentration</label>
-						</div>
-						<input type="text" id="acetyleneconc" required pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$" placeholder="Insert value 1-100">
-						<span class="validity"></span>
-          </div>
-          <div class="input">
-            <div class="label">
-							<label for="ethyleneconc">Ethylene Concentration</label>
-						</div>
-						<input type="text" id="ethyleneconc" required pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$" placeholder="Insert value 1-100">
-						<span class="validity"></span>
-          </div>
-          <div class="input">
-            <div class="label">
-							<label for="ethaneconc">Ethane Concentration</label>
-						</div>
-						<input type="text" id="ethaneconc" required pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$" placeholder="Insert value 1-100">
-						<span class="validity"></span>
-          </div>
-          <div class="input">
-            <div class="label">
-							<label for="cmonoxideconc">Carbon Monoxide Concentration</label>
-						</div>
-						<input type="text" id="cmonoxideconc" required pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$" placeholder="Insert value 1-100">
-						<span class="validity"></span>
-          </div>
-          <div class="input">
-            <div class="label">
-							<label for="cdioxideconc">Carbon Dioxide Concentration</label>
-						</div>
-						<input type="text" id="cdioxideconc" required pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$" placeholder="Insert value 1-100">
-						<span class="validity"></span>
-          </div>
-          <div class="input">
-            <div class="label">
-							<label for="totalcombustibles">Total Dissolve Combustibles</label>
-						</div>
-						<input type="text" id="totalcombustibles" required pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$" placeholder="Insert value 1-100">
-						<span class="validity"></span>
-          </div>
-					<div>
-						<button class="button" type="submit">Record</button>
-					</div>
-        </div>
-        <div class="image-wrap">
-					<div class="select">
-						<select id="selection" onchange="showImage()">
-							<option value="triange1">Duval Triangle 1</option>
-							<option value="triange4">Duval Triangle 4</option>
-							<option value="triange5">Duval Triangle 5</option>
-							<option value="pentagon1">Duval Pentagon 1</option>
-							<option value="pentagon2">Duval Pentagon 2</option>
-						</select>
-					</div>
-					<div class="image-frame">
-						{% include 'imagedisplay.html' %}
-					</div>
-					<div class="fs-400 fw-semi-bold">
-						Type of fault: <output name="fault"></output>
-					</div>
-        </div>
-      </form>
-    </div>
-  </main>
-
-
-
-</body>
-
+        </form>
+      </div>
+    </main>
+  </body>
 </html>

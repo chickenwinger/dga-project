@@ -16,8 +16,13 @@ firebaseConfig = {
 
 firebase = pyrebase.initialize_app(firebaseConfig)
 
-# connect to database
+# for authentication
 auth = firebase.auth()
+# for firebase realtime database
+db = firebase.database()
+# for firebase storage but we will not use it in this app
+# storage = firebase.storage()
+
 
 app.secret_key = 'abc123'
 
@@ -31,6 +36,7 @@ def index():
 
         try:
             user = auth.sign_in_with_email_and_password(email, password)
+            print(auth.get_account_info(user['idToken']))
             session['email'] = email
             return redirect(url_for('home'))
         except: # pylint: disable=W0702
@@ -51,6 +57,8 @@ def logout():
 @app.route('/registration', methods=['GET', 'POST'])
 def registration():
     if request.method == 'POST':
+        # we can use request.form.get() to avoid getting errors if the form field is empty
+        # with this we will get None instead
         # email = request.form.get('email')
         # password = request.form.get('password')
         # confirm_password = request.form.get('cpassword')
@@ -82,7 +90,7 @@ def registration():
     return render_template('registration.html')
 
 
-@app.route("/home")
+@app.route("/home", methods=['GET', 'POST'])
 def home():
     return render_template("home.html")
 
