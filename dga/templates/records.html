@@ -18,8 +18,9 @@
       <nav class="nav-bar">
 				<div><p class="fs-primary-heading fw-bold text-accent-400">DGA 4 U</p></div>
         <ul class="text-neutral-100 fw-semi-bold fs-600">
-          <li><a href="{{ url_for('home') }}">Home</a></li>
-          <li><a href="{{ url_for('records') }}">Records</a></li>
+          <li><a href="{{ url_for('rtdatabase.home') }}">Home</a></li>
+          <li><a href="{{ url_for('rtdatabase.records') }}">Records</a></li>
+          <li><a href="{{ url_for('authentication.logout') }}">Logout</a></li>
         </ul>
       </nav>
     </div>
