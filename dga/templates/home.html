@@ -45,9 +45,10 @@
               <div class="label">
                 <label for="rname">Record Name</label>
               </div>
-              <input type="text" id="rname" required />
+              <input type="text" id="rname" name="rname" required />
               <span class="validity"></span>
             </div>
+            {% include 'flash_messages.html' %}
             <div class="input">
               <div class="label">
                 <label for="hydrogenconc">Hydrogen Concentration</label>
@@ -55,6 +56,7 @@
               <input
                 type="text"
                 id="hydrogenconc"
+                name="hydrogenconc"
                 required
                 pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
                 placeholder="Insert value 0-100"
@@ -68,6 +70,7 @@
               <input
                 type="text"
                 id="methaneconc"
+                name="methaneconc"
                 required
                 pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
                 placeholder="Insert value 0-100"
@@ -81,6 +84,7 @@
               <input
                 type="text"
                 id="acetyleneconc"
+                name="acetyleneconc"
                 required
                 pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
                 placeholder="Insert value 0-100"
@@ -94,6 +98,7 @@
               <input
                 type="text"
                 id="ethyleneconc"
+                name="ethyleneconc"
                 required
                 pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
                 placeholder="Insert value 0-100"
@@ -107,6 +112,7 @@
               <input
                 type="text"
                 id="ethaneconc"
+                name="ethaneconc"
                 required
                 pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
                 placeholder="Insert value 0-100"
@@ -120,6 +126,7 @@
               <input
                 type="text"
                 id="cmonoxideconc"
+                name="cmonoxideconc"
                 required
                 pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
                 placeholder="Insert value 0-100"
@@ -133,6 +140,7 @@
               <input
                 type="text"
                 id="cdioxideconc"
+                name="cdioxideconc"
                 required
                 pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
                 placeholder="Insert value 0-100"
@@ -141,26 +149,26 @@
             </div>
             <div class="input">
               <div class="label">
-                <label for="totalcombustibles"
-                  >Total Dissolve Combustibles</label
-                >
+                <label for="totalcombustibles">Total Dissolve Combustibles</label>
               </div>
               <input
                 type="text"
                 id="totalcombustibles"
+                name="totalcombustibles"
                 required
                 pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
                 placeholder="Insert value 0-100"
               />
               <span class="validity"></span>
             </div>
+            {% include 'flash_messages.html' %}
             <div>
-              <button class="button" type="submit">Record</button>
+              <button class="button" type="submit" name="action" value="record">Record</button>
             </div>
           </div>
           <div class="image-wrap">
             <div class="select">
-              <select id="selection" onchange="showImage()">
+              <select id="selection" onchange="this.form.submit()" name="action">
                 <option value="triange1">Duval Triangle 1</option>
                 <option value="triange4">Duval Triangle 4</option>
                 <option value="triange5">Duval Triangle 5</option>

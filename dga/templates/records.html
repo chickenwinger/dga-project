@@ -1,70 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <title>DGA 4 U</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
-  <title>DGA 4 U</title>
-</head>
+  <body>
+    <header class="header bg-primary-400">
+      <div class="container">
+        <nav class="nav-bar">
+          <div>
+            <p class="fs-primary-heading fw-bold text-accent-400">DGA 4 U</p>
+          </div>
+          <ul class="text-neutral-100 fw-semi-bold fs-600">
+            <li><a href="{{ url_for('rtdatabase.home') }}">Home</a></li>
+            <li><a href="{{ url_for('rtdatabase.records') }}">Records</a></li>
+            <li><a href="{{ url_for('authentication.logout') }}">Logout</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
 
-<body>
-  <header class="header bg-primary-400">
-    <div class="container">
-      <nav class="nav-bar">
-				<div><p class="fs-primary-heading fw-bold text-accent-400">DGA 4 U</p></div>
-        <ul class="text-neutral-100 fw-semi-bold fs-600">
-          <li><a href="{{ url_for('rtdatabase.home') }}">Home</a></li>
-          <li><a href="{{ url_for('rtdatabase.records') }}">Records</a></li>
-          <li><a href="{{ url_for('authentication.logout') }}">Logout</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-  <main>
-    <div class="container bg-accent-400">
-      <form class="even-columns">
-        <div class="input-wrap dga">
-					<div class="fs-secondary-heading fw-semi-bold">
-						<p>Records</p>
-					</div>
-						<output>
-
-						</output>
-					<div>
-						<button class="button" type="submit">Show</button>
-					</div>
-        </div>
-        <div class="image-wrap">
-					<div class="select">
-						<select id="selection" onchange="showImage()">
-							<option value="triange1">Duval Triangle 1</option>
-							<option value="triange4">Duval Triangle 4</option>
-							<option value="triange5">Duval Triangle 5</option>
-							<option value="pentagon1">Duval Pentagon 1</option>
-							<option value="pentagon2">Duval Pentagon 2</option>
-						</select>
-					</div>
-					<div class="image-frame">
-						<output name="image">
-							<img src="" alt="DGA tool">
-						</output>
-					</div>
-					<div class="fs-400 fw-semi-bold">
-						Type of fault: <output name="fault"></output>
-					</div>
-        </div>
-      </form>
-    </div>
-  </main>
-
-
-
-</body>
-
+    <main>
+      <div class="container bg-accent-400">
+        <form class="even-columns">
+          <div class="input-wrap dga">
+            <div class="fs-secondary-heading fw-semi-bold">
+              <p>Records</p>
+            </div>
+              {% for l in t %}
+              <ul class="list-group">
+                <li class="list-group-item">{{l}}</li>
+              </ul>
+              {% endfor %}
+            <div>
+              <button class="button" type="submit">Show</button>
+            </div>
+          </div>
+          <div class="image-wrap">
+            <div class="select">
+              <select id="selection" onchange="showImage()">
+                <option value="triange1">Duval Triangle 1</option>
+                <option value="triange4">Duval Triangle 4</option>
+                <option value="triange5">Duval Triangle 5</option>
+                <option value="pentagon1">Duval Pentagon 1</option>
+                <option value="pentagon2">Duval Pentagon 2</option>
+              </select>
+            </div>
+            <div class="image-frame">
+              <output name="image">
+                <img src="" alt="DGA tool" />
+              </output>
+            </div>
+            <div class="fs-400 fw-semi-bold">
+              Type of fault: <output name="fault"></output>
+            </div>
+          </div>
+        </form>
+      </div>
+    </main>
+  </body>
 </html>

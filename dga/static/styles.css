@@ -270,15 +270,17 @@ input:valid + span::after {
 
 .msg {
   color: green;
-  font-size: var(--fs-400);
+  font-size: var(--fs-300);
   font-weight: var(--fw-semi-bold);
   align-items: flex-start;
+  padding: 0;
 }
 .error {
   color: firebrick;
-  font-size: var(--fs-400);
+  font-size: var(--fs-300);
   font-weight: var(--fw-semi-bold);
   align-items: flex-start;
+  padding: 0;
 }
 
 /* general styles */

@@ -1,0 +1,24 @@
+{
+    ‘kind’: ‘identitytoolkit#GetAccountInfoResponse’,
+    ‘users’: [
+        {
+            ‘localId’: ‘c110Hzo426NIc2F1psSqdCV92Go2’,
+            ‘email’: ‘youremail@gmail.com’, 
+            ‘passwordHash’: ‘UkVEQUNURUQ=’, 
+            ‘emailVerified’: True, 
+            ‘passwordUpdatedAt’: 1596736732383, 
+            ‘providerUserInfo’: [
+                {
+                    ‘providerId’: ‘password’,
+                    ‘federatedId’: ‘youremail@gmail.com’, 
+                    ‘email’: ‘youremail@gmail.com’, 
+                    ‘rawId’: ‘youremail@gmail.com’
+                }
+            ], 
+            ‘validSince’: ‘1596736732’, 
+            ‘lastLoginAt’: ‘1596737537530’, 
+            ‘createdAt’: ‘1596730349180’, 
+            ‘lastRefreshAt’: ‘2020–08–06T18:12:18.546Z’
+        }
+    ]
+}
