@@ -1,9 +1,6 @@
 from flask import Flask, render_template, url_for, request, redirect, flash, session, Blueprint
-from functools import wraps
-from .firebaseConfig import firebase
-
-# for authentication
-auth = firebase.auth()
+from dga import auth
+from .rtdatabase import db
 
 authentication = Blueprint('authentication', __name__)
 
@@ -17,9 +14,10 @@ def index():
         try:
             user = auth.sign_in_with_email_and_password(email, password)
             print(auth.get_account_info(user['idToken']))
-            session['email'] = email
+            # print(auth.current_user)
+            session['idToken'] = user['idToken']
             return redirect(url_for('rtdatabase.home'))
-        except: # pylint: disable=W0702
+        except: 
             flash('Invalid username/password combination', 'error')
             return redirect(url_for('authentication.index'))
 
@@ -29,7 +27,7 @@ def index():
 @authentication.route('/logout')
 def logout():
     auth.current_user = None
-    session.pop('email', None)
+    session.pop('idToken', None)
     print('User logged out')
     return redirect(url_for('authentication.index'))
 
@@ -45,7 +43,6 @@ def registration():
         email = request.form['email']
         password = request.form['password']
         confirm_password = request.form['cpassword']
-        print(email, password, confirm_password)
         session.pop('_flashes', None) # clear flash messages 
 
         try:
@@ -60,19 +57,17 @@ def registration():
                 return redirect(url_for('authentication.registration'))
 
             auth.create_user_with_email_and_password(email, password)
+            
             flash('Registration successful. You can login now.', 'msg')
-            return redirect(url_for('authenication.index'))
-        except: # pylint: disable=W0702
+            return redirect(url_for('authentication.index'))
+        except Exception as e: 
+            print(e)
             flash('Email already exists', 'error')
-            print('Email already exists', )
             return redirect(url_for('authentication.registration'))
 
     return render_template('registration.html')
 
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if not session.get('email'):
-            return redirect(url_for('authentication.index'))
-        return f(*args, **kwargs)
-    return decorated_function
+# def get_user_id_by_email(email):
+#     user = auth.get_account_info(auth.current_user['idToken'])['localId']
+    
+#     return user
