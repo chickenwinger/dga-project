@@ -1,8 +1,10 @@
 from flask import Flask, render_template, url_for, request, redirect, flash, session, Blueprint
 from dga import db, auth
+from collections import OrderedDict
 import time
 from .firebaseConfig import firebase
 from .auth_utils import login_required
+from .dga_utils import dt1, dt4, dt5, pentagon1, pentagon2
 
 
 rtdatabase = Blueprint('rtdatabase', __name__)
@@ -14,15 +16,46 @@ def home():
         user = auth.get_account_info(session['idToken'])['users'][0]
                 
         if request.form['action'] == 'record':
-            # print(user["localId"])
-            # print(auth.current_user)
-            add_record(user)
+            print(request.form)
+            if add_record(user):
+                flash('Record name already exists', 'error')
+                return render_template("home.html")
+            else:
+                flash('Record added successfully', 'msg')
+                return redirect(url_for('rtdatabase.home'))
             
-            flash('Record added successfully', 'msg')
-            return redirect(url_for('rtdatabase.home'))
+            # print(get_last_record())
+        else:
+            ordered_dict = get_last_record()
+            record_query = next(iter(ordered_dict.values()))
+            hydrogen = int(record_query['hydrogen'])
+            methane = int(record_query['methane'])
+            acetylene = int(record_query['acetylene'])
+            ethylene = int(record_query['ethylene'])
+            ethane = int(record_query['ethane'])
+            cmonoxide = int(record_query['cmonoxide'])
+            cdioxide = int(record_query['cdioxide'])
+            
+            dt1(ethylene, methane, acetylene)
+            dt4(methane, hydrogen, ethane)
+            dt5(ethylene, methane, ethane)
+            pentagon1(ethane, hydrogen, acetylene, ethylene, methane)
+            pentagon2(ethane, hydrogen, acetylene, ethylene, methane)
+            
+            img = None
+            if request.form['action'] == 'triangle1':
+                img = 1
+            if request.form['action'] == 'triangle4':
+                img = 2
+            if request.form['action'] == 'triangle5':
+                img = 3
+            if request.form['action'] == 'pentagon1':
+                img = 4
+            if request.form['action'] == 'pentagon2':
+                img = 5
+                
+            return render_template("home.html", img = img)
         
-        
-
     return render_template("home.html")
 
 
@@ -55,15 +88,23 @@ def add_record(user):
         "total_combustibles": total
     }
     
-    ref = db.child("records").child(user["localId"])
+    # doing ref like this does not work somehow, will instead refresh the path everytime it is called
+    # ref = db.child('records').child(user['localId'])
     
-    if ref.get().val() is None:
-        db.child("records").child(user["localId"]).set({record: data})
-        return redirect(url_for('rtdatabase.home'))
+    # if user (localId) doesn't exist
+    if db.child('records').child(user['localId']).get().val() is None:
+        db.child('records').child(user['localId']).set({record: data})
+    # if record name already exists
+    elif db.child('records').child(user['localId']).child(record).get().val():
+        return True
+    # if record name doesn't exist
+    else:
+        print("Success")
+        db.child('records').child(user['localId']).child(record).set(data)
+
+
+def get_last_record():
+    user = auth.get_account_info(session['idToken'])['users'][0]
+    ref = db.child('records').child(user['localId']).order_by_child('timestamp').limit_to_last(1)
     
-    if ref.child(record).get().val() is not None:
-        flash('Record name already exists', 'error')
-        return redirect(url_for('rtdatabase.home'))
-    
-    ref.child(record).set(data)
-    return redirect(url_for('rtdatabase.home'))
+    return ref.get().val()
