@@ -1,5 +1,7 @@
-import numpy as np
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import numpy as np
 import math
 
 def percent_gas(num1, num2, num3):
@@ -81,7 +83,7 @@ def dt1(ethylene, methane, acetylene):
     ax1.fill(region_D1[:, 0], region_D1[:, 1], '#eca9fc')
     ax1.fill(region_D2[:, 0], region_D2[:, 1], '#B8F198')
     ax1.fill(region_DT[:, 0], region_DT[:, 1], '#B45F57')
-    ax1.scatter(sample_point[0], sample_point[1], marker='x', c='r', zorder=2)
+    ax1.scatter(sample_point[0], sample_point[1], marker='x', c='r', zorder=2) # type: ignore
     ax1.grid(linestyle='--', alpha=0.4, axis='both')
 
     #
@@ -120,58 +122,66 @@ def dt1(ethylene, methane, acetylene):
     label14 = np.array([35, 60, 1]) @ np.transpose(A)
     ax1.text(label14[0], label14[1], 'T2', color='#232663')
     label15 = np.array([27, 106, 1]) @ np.transpose(A)
-    ax1.text(label15[0], label15[1], 'Fault detected: ', color='#000')
+    # ax1.text(label15[0], label15[1], 'Fault detected: ', color='#000')
     #
     # Display fault by region
     #
+    fault = None
     if x <= 2 and y >= 98:
-        label20 = np.array([33, 94, 1]) @ np.transpose(A)
-        ax1.text(label20[0], label20[1], 'PD', color='#000')
-        label21 = np.array([36, 88, 1]) @ np.transpose(A)
-        ax1.text(label21[0], label21[1], 'Partial discharges', color='#000')
+        # label20 = np.array([33, 94, 1]) @ np.transpose(A)
+        # ax1.text(label20[0], label20[1], 'PD', color='#000')
+        # label21 = np.array([36, 88, 1]) @ np.transpose(A)
+        # ax1.text(label21[0], label21[1], 'Partial discharges', color='#000')
+        fault = "PD - Partial discharges"
     elif x <= 20 and 76 <= y <= 98 and z <= 4:
-        label20 = np.array([33, 94, 1]) @ np.transpose(A)
-        ax1.text(label20[0], label20[1], 'T1', color='#000000')
-        label21 = np.array([36, 88, 1]) @ np.transpose(A)
-        ax1.text(label21[0], label21[1], 'Thermal fault', color='#000')
-        label22 = np.array([39, 82, 1]) @ np.transpose(A)
-        ax1.text(label22[0], label22[1], 't < 300°C', color='#000')
+        # label20 = np.array([33, 94, 1]) @ np.transpose(A)
+        # ax1.text(label20[0], label20[1], 'T1', color='#000000')
+        # label21 = np.array([36, 88, 1]) @ np.transpose(A)
+        # ax1.text(label21[0], label21[1], 'Thermal fault', color='#000')
+        # label22 = np.array([39, 82, 1]) @ np.transpose(A)
+        # ax1.text(label22[0], label22[1], 't < 300°C', color='#000')
+        fault = "T1 - Thermal fault, t < 300°C"
     elif 20 <= x <= 50 and 46 <= y <= 80 and z <= 4:
-        label20 = np.array([33, 94, 1]) @ np.transpose(A)
-        ax1.text(label20[0], label20[1], 'T2', color='#000')
-        label21 = np.array([36, 88, 1]) @ np.transpose(A)
-        ax1.text(label21[0], label21[1], 'Thermal fault', color='#000')
-        label22 = np.array([39, 82, 1]) @ np.transpose(A)
-        ax1.text(label22[0], label22[1], '300°C < t < 700°C', color='#000')
+        # label20 = np.array([33, 94, 1]) @ np.transpose(A)
+        # ax1.text(label20[0], label20[1], 'T2', color='#000')
+        # label21 = np.array([36, 88, 1]) @ np.transpose(A)
+        # ax1.text(label21[0], label21[1], 'Thermal fault', color='#000')
+        # label22 = np.array([39, 82, 1]) @ np.transpose(A)
+        # ax1.text(label22[0], label22[1], '300°C < t < 700°C', color='#000')
+        fault = "T2 - Thermal fault, 300°C < t < 700°C"
     elif x >= 50 and y <= 50 and z <= 15:
-        label20 = np.array([33, 94, 1]) @ np.transpose(A)
-        ax1.text(label20[0], label20[1], 'T3', color='#000000')
-        label21 = np.array([36, 88, 1]) @ np.transpose(A)
-        ax1.text(label21[0], label21[1], 'Thermal fault', color='#000000')
-        label22 = np.array([39, 82, 1]) @ np.transpose(A)
-        ax1.text(label22[0], label22[1], 't > 700°C', color='#000000')
+        # label20 = np.array([33, 94, 1]) @ np.transpose(A)
+        # ax1.text(label20[0], label20[1], 'T3', color='#000000')
+        # label21 = np.array([36, 88, 1]) @ np.transpose(A)
+        # ax1.text(label21[0], label21[1], 'Thermal fault', color='#000000')
+        # label22 = np.array([39, 82, 1]) @ np.transpose(A)
+        # ax1.text(label22[0], label22[1], 't > 700°C', color='#000000')
+        fault = "T3 - Thermal fault, t > 700°C"
     elif x <= 23 and y <= 87 and z >= 13:
-        print('D1 fault detected!')
-        label20 = np.array([33, 94, 1]) @ np.transpose(A)
-        ax1.text(label20[0], label20[1], 'D1', color='#000000')
-        label21 = np.array([36, 88, 1]) @ np.transpose(A)
-        ax1.text(label21[0], label21[1], 'Discharges of low', color='#000000')
-        label22 = np.array([39, 82, 1]) @ np.transpose(A)
-        ax1.text(label22[0], label22[1], 'energy', color='#000000')
+        # print('D1 fault detected!')
+        # label20 = np.array([33, 94, 1]) @ np.transpose(A)
+        # ax1.text(label20[0], label20[1], 'D1', color='#000000')
+        # label21 = np.array([36, 88, 1]) @ np.transpose(A)
+        # ax1.text(label21[0], label21[1], 'Discharges of low', color='#000000')
+        # label22 = np.array([39, 82, 1]) @ np.transpose(A)
+        # ax1.text(label22[0], label22[1], 'energy', color='#000000')
+        fault = "D1 - Discharges of low energy"
     elif 23 <= x <= 40 and y <= 64 and z >= 13 or x >= 40 and y <= 31 and 29 <= z <= 60:
-        label20 = np.array([33, 94, 1]) @ np.transpose(A)
-        ax1.text(label20[0], label20[1], 'D2', color='#000000')
-        label21 = np.array([36, 88, 1]) @ np.transpose(A)
-        ax1.text(label21[0], label21[1], 'Discharges of high', color='#000000')
-        label22 = np.array([39, 82, 1]) @ np.transpose(A)
-        ax1.text(label22[0], label22[1], 'energy', color='#000000')
+        # label20 = np.array([33, 94, 1]) @ np.transpose(A)
+        # ax1.text(label20[0], label20[1], 'D2', color='#000000')
+        # label21 = np.array([36, 88, 1]) @ np.transpose(A)
+        # ax1.text(label21[0], label21[1], 'Discharges of high', color='#000000')
+        # label22 = np.array([39, 82, 1]) @ np.transpose(A)
+        # ax1.text(label22[0], label22[1], 'energy', color='#000000')
+        fault = "D2 - Discharges of high energy"
     else:
-        label20 = np.array([33, 94, 1]) @ np.transpose(A)
-        ax1.text(label20[0], label20[1], 'DT', color='#000000')
-        label21 = np.array([36, 88, 1]) @ np.transpose(A)
-        ax1.text(label21[0], label21[1], 'Thermal fault', color='#000000')
-        label22 = np.array([39, 82, 1]) @ np.transpose(A)
-        ax1.text(label22[0], label22[1], 'and discharges', color='#000000')
+        # label20 = np.array([33, 94, 1]) @ np.transpose(A)
+        # ax1.text(label20[0], label20[1], 'DT', color='#000000')
+        # label21 = np.array([36, 88, 1]) @ np.transpose(A)
+        # ax1.text(label21[0], label21[1], 'Thermal fault', color='#000000')
+        # label22 = np.array([39, 82, 1]) @ np.transpose(A)
+        # ax1.text(label22[0], label22[1], 'and discharges', color='#000000')
+        fault = "DT - Thermal fault and discharges"
     #
     # Show the final plot
     #
@@ -179,7 +189,10 @@ def dt1(ethylene, methane, acetylene):
     ax1.set_ylim(0, 550)
     ax1.get_xaxis().set_visible(False)
     ax1.get_yaxis().set_visible(False)
+    
     plt.savefig('dga/static/images/dt1.png')
+    
+    return fault
 
 
 def dt4(methane, hydrogen, ethane):
@@ -242,7 +255,7 @@ def dt4(methane, hydrogen, ethane):
     ax1.fill(region_O[:, 0], region_O[:, 1], '#ffc4a9')
     ax1.fill(region_C[:, 0], region_C[:, 1], '#f3918d')
     ax1.fill(region_S[:, 0], region_S[:, 1], '#89d2ef')
-    ax1.scatter(sample_point[0], sample_point[1], marker='x', c='r', zorder=2)
+    ax1.scatter(sample_point[0], sample_point[1], marker='x', c='r', zorder=2) # type: ignore
     ax1.grid(linestyle='--', alpha=0.4, axis='both')
 
     #
@@ -275,51 +288,58 @@ def dt4(methane, hydrogen, ethane):
     label13 = np.array([79, 3, 1]) @ np.transpose(A)
     ax1.text(label13[0], label13[1], 'C', color='#232663')
     label14 = np.array([27, 106, 1]) @ np.transpose(A)
-    ax1.text(label14[0], label14[1], 'Fault detected: ', color='#000')
+    # ax1.text(label14[0], label14[1], 'Fault detected: ', color='#000')
     #
     # Detect fault by region
     #
+    fault = None
     if 2 <= x <= 15 and 84 <= y <= 98 and z <= 1:
-        label20 = np.array([33, 94, 1]) @ np.transpose(A)
-        ax1.text(label20[0], label20[1], 'PD', color='#000')
-        label21 = np.array([36, 88, 1]) @ np.transpose(A)
-        ax1.text(label21[0], label21[1], 'Partial discharges', color='#000')
+        # label20 = np.array([33, 94, 1]) @ np.transpose(A)
+        # ax1.text(label20[0], label20[1], 'PD', color='#000')
+        # label21 = np.array([36, 88, 1]) @ np.transpose(A)
+        # ax1.text(label21[0], label21[1], 'Partial discharges', color='#000')
+        fault = "PD - Partial discharges"
     elif x <= 70 and y <= 9 and z >= 30:
-        label20 = np.array([33, 94, 1]) @ np.transpose(A)
-        ax1.text(label20[0], label20[1], 'O', color='#000000')
-        label21 = np.array([36, 88, 1]) @ np.transpose(A)
-        ax1.text(label21[0], label21[1], 'Overheating', color='#000000')
-        label22 = np.array([39, 82, 1]) @ np.transpose(A)
-        ax1.text(label22[0], label22[1], 't < 250°C', color='#000000')
+        # label20 = np.array([33, 94, 1]) @ np.transpose(A)
+        # ax1.text(label20[0], label20[1], 'O', color='#000000')
+        # label21 = np.array([36, 88, 1]) @ np.transpose(A)
+        # ax1.text(label21[0], label21[1], 'Overheating', color='#000000')
+        # label22 = np.array([39, 82, 1]) @ np.transpose(A)
+        # ax1.text(label22[0], label22[1], 't < 250°C', color='#000000')
+        fault = "O - Overheatingm, t < 250°C"
     elif x <= 45 and 9 <= y <= 54 and z >= 46:
-        label20 = np.array([33, 94, 1]) @ np.transpose(A)
-        ax1.text(label20[0], label20[1], 'ND', color='#000000')
-        label21 = np.array([36, 88, 1]) @ np.transpose(A)
-        ax1.text(label21[0], label21[1], 'Not detected', color='#000000')
+        # label20 = np.array([33, 94, 1]) @ np.transpose(A)
+        # ax1.text(label20[0], label20[1], 'ND', color='#000000')
+        # label21 = np.array([36, 88, 1]) @ np.transpose(A)
+        # ax1.text(label21[0], label21[1], 'Not detected', color='#000000')
+        fault = "ND - Not detected"
     elif (x >= 36 and y <= 64 and z <= 24) or (x >= 55 and y <= 15 and 24 <= z <= 30):
-        label20 = np.array([33, 94, 1]) @ np.transpose(A)
-        ax1.text(label20[0], label20[1], 'C', color='#000000')
-        label21 = np.array([36, 88, 1]) @ np.transpose(A)
-        ax1.text(label21[0], label21[1], 'Paper carbonization', color='#000000')
-        label22 = np.array([39, 82, 1]) @ np.transpose(A)
-        ax1.text(label22[0], label22[1], 't > 300°C', color='#000000')
+        # label20 = np.array([33, 94, 1]) @ np.transpose(A)
+        # ax1.text(label20[0], label20[1], 'C', color='#000000')
+        # label21 = np.array([36, 88, 1]) @ np.transpose(A)
+        # ax1.text(label21[0], label21[1], 'Paper carbonization', color='#000000')
+        # label22 = np.array([39, 82, 1]) @ np.transpose(A)
+        # ax1.text(label22[0], label22[1], 't > 300°C', color='#000000')
+        fault = "C - Paper carbonization, t > 300°C"
     else:
-        label20 = np.array([33, 94, 1]) @ np.transpose(A)
-        ax1.text(label20[0], label20[1], 'S', color='#000000')
-        label21 = np.array([36, 88, 1]) @ np.transpose(A)
-        ax1.text(label21[0], label21[1], 'Stray gassing of', color='#000000')
-        label22 = np.array([39, 82, 1]) @ np.transpose(A)
-        ax1.text(label22[0], label22[1], 'mineral oil', color='#000000')
+        # label20 = np.array([33, 94, 1]) @ np.transpose(A)
+        # ax1.text(label20[0], label20[1], 'S', color='#000000')
+        # label21 = np.array([36, 88, 1]) @ np.transpose(A)
+        # ax1.text(label21[0], label21[1], 'Stray gassing of', color='#000000')
+        # label22 = np.array([39, 82, 1]) @ np.transpose(A)
+        # ax1.text(label22[0], label22[1], 'mineral oil', color='#000000')
+        fault = "S - Stray gassing of mineral oil"
     #
     # Show the final plot
     #
     ax1.set_xlim(0, 625)
     ax1.set_ylim(0, 550)
-
     ax1.get_xaxis().set_visible(False)
     ax1.get_yaxis().set_visible(False)
 
     plt.savefig('dga/static/images/dt4.png')
+    
+    return fault
 
 
 def dt5(ethylene, methane, ethane):
@@ -396,7 +416,7 @@ def dt5(ethylene, methane, ethane):
     ax1.fill(region_O_2[:, 0], region_O_2[:, 1], '#ffc4a9')
     ax1.fill(region_C[:, 0], region_C[:, 1], '#f3918d')
     ax1.fill(region_S[:, 0], region_S[:, 1], '#89d2ef')
-    ax1.scatter(sample_point[0], sample_point[1], marker='x', c='r', zorder=2)
+    ax1.scatter(sample_point[0], sample_point[1], marker='x', c='r', zorder=2) # type: ignore
     ax1.grid(linestyle='--', alpha=0.4, axis='both')
     #
     # Also place axes captions
@@ -436,55 +456,63 @@ def dt5(ethylene, methane, ethane):
     label17 = np.array([35, 42, 1]) @ np.transpose(A)
     ax1.text(label17[0], label17[1], 'C', color='#232663')
     label18 = np.array([27, 106, 1]) @ np.transpose(A)
-    ax1.text(label18[0], label18[1], 'Fault detected: ', color='#000')
+    # ax1.text(label18[0], label18[1], 'Fault detected: ', color='#000')
     #
     # Detect fault by region
     #
+    fault = None
     if x <= 1 and 84 <= y <= 98 and 2 <= z <= 15:
-        label20 = np.array([33, 94, 1]) @ np.transpose(A)
-        ax1.text(label20[0], label20[1], 'PD', color='#000')
-        label21 = np.array([36, 88, 1]) @ np.transpose(A)
-        ax1.text(label21[0], label21[1], 'Partial discharges', color='#000')
+        # label20 = np.array([33, 94, 1]) @ np.transpose(A)
+        # ax1.text(label20[0], label20[1], 'PD', color='#000')
+        # label21 = np.array([36, 88, 1]) @ np.transpose(A)
+        # ax1.text(label21[0], label21[1], 'Partial discharges', color='#000')
+        fault = "PD - Partial discharges"
     elif x <= 10 and 36 <= y <= 85 and 15 <= z <= 54:
-        label20 = np.array([33, 94, 1]) @ np.transpose(A)
-        ax1.text(label20[0], label20[1], 'S', color='#000000')
-        label21 = np.array([36, 88, 1]) @ np.transpose(A)
-        ax1.text(label21[0], label21[1], 'Stray gassing of', color='#000000')
-        label22 = np.array([39, 82, 1]) @ np.transpose(A)
-        ax1.text(label22[0], label22[1], 'mineral oil', color='#000000')
+        # label20 = np.array([33, 94, 1]) @ np.transpose(A)
+        # ax1.text(label20[0], label20[1], 'S', color='#000000')
+        # label21 = np.array([36, 88, 1]) @ np.transpose(A)
+        # ax1.text(label21[0], label21[1], 'Stray gassing of', color='#000000')
+        # label22 = np.array([39, 82, 1]) @ np.transpose(A)
+        # ax1.text(label22[0], label22[1], 'mineral oil', color='#000000')
+        fault = "S - Stray gassing of mineral oil"
     elif x <= 10:
-        label20 = np.array([33, 94, 1]) @ np.transpose(A)
-        ax1.text(label20[0], label20[1], 'O', color='#000000')
-        label21 = np.array([36, 88, 1]) @ np.transpose(A)
-        ax1.text(label21[0], label21[1], 'Overheating', color='#000000')
-        label22 = np.array([39, 82, 1]) @ np.transpose(A)
-        ax1.text(label22[0], label22[1], 't < 250°C', color='#000000')
+        # label20 = np.array([33, 94, 1]) @ np.transpose(A)
+        # ax1.text(label20[0], label20[1], 'O', color='#000000')
+        # label21 = np.array([36, 88, 1]) @ np.transpose(A)
+        # ax1.text(label21[0], label21[1], 'Overheating', color='#000000')
+        # label22 = np.array([39, 82, 1]) @ np.transpose(A)
+        # ax1.text(label22[0], label22[1], 't < 250°C', color='#000000')
+        fault = "O - Overheating, t < 250°C"
     elif 10 <= x <= 35 and 53 <= y <= 90 and z <= 12:
-        label20 = np.array([33, 94, 1]) @ np.transpose(A)
-        ax1.text(label20[0], label20[1], 'T2', color='#000')
-        label21 = np.array([36, 88, 1]) @ np.transpose(A)
-        ax1.text(label21[0], label21[1], 'Thermal fault', color='#000')
-        label22 = np.array([39, 82, 1]) @ np.transpose(A)
-        ax1.text(label22[0], label22[1], '300°C < t < 700°C', color='#000')
+        # label20 = np.array([33, 94, 1]) @ np.transpose(A)
+        # ax1.text(label20[0], label20[1], 'T2', color='#000')
+        # label21 = np.array([36, 88, 1]) @ np.transpose(A)
+        # ax1.text(label21[0], label21[1], 'Thermal fault', color='#000')
+        # label22 = np.array([39, 82, 1]) @ np.transpose(A)
+        # ax1.text(label22[0], label22[1], '300°C < t < 700°C', color='#000')
+        fault = "T2 - Thermal fault, 300°C < t < 700°C"
     elif 10 <= x <= 35 and y <= 60 and 30 <= z <= 90:
-        label20 = np.array([33, 94, 1]) @ np.transpose(A)
-        ax1.text(label20[0], label20[1], 'ND', color='#000000')
-        label21 = np.array([36, 88, 1]) @ np.transpose(A)
-        ax1.text(label21[0], label21[1], 'Not detected', color='#000000')
+        # label20 = np.array([33, 94, 1]) @ np.transpose(A)
+        # ax1.text(label20[0], label20[1], 'ND', color='#000000')
+        # label21 = np.array([36, 88, 1]) @ np.transpose(A)
+        # ax1.text(label21[0], label21[1], 'Not detected', color='#000000')
+        fault = "ND - Not detected"
     elif (10 <= x <= 50 and 20 <= y <= 78 and 12 <= z <= 30) or (50 <= x <= 70 and y <= 36 and 14 <= z <= 30):
-        label20 = np.array([33, 94, 1]) @ np.transpose(A)
-        ax1.text(label20[0], label20[1], 'C', color='#000000')
-        label21 = np.array([36, 88, 1]) @ np.transpose(A)
-        ax1.text(label21[0], label21[1], 'Paper carbonization', color='#000000')
-        label22 = np.array([39, 82, 1]) @ np.transpose(A)
-        ax1.text(label22[0], label22[1], 't > 300°C', color='#000000')
+        # label20 = np.array([33, 94, 1]) @ np.transpose(A)
+        # ax1.text(label20[0], label20[1], 'C', color='#000000')
+        # label21 = np.array([36, 88, 1]) @ np.transpose(A)
+        # ax1.text(label21[0], label21[1], 'Paper carbonization', color='#000000')
+        # label22 = np.array([39, 82, 1]) @ np.transpose(A)
+        # ax1.text(label22[0], label22[1], 't > 300°C', color='#000000')
+        fault = "C - Paper carbonization, t > 300°C"
     else:
-        label20 = np.array([33, 94, 1]) @ np.transpose(A)
-        ax1.text(label20[0], label20[1], 'T3', color='#000000')
-        label21 = np.array([36, 88, 1]) @ np.transpose(A)
-        ax1.text(label21[0], label21[1], 'Thermal fault', color='#000000')
-        label22 = np.array([39, 82, 1]) @ np.transpose(A)
-        ax1.text(label22[0], label22[1], 't > 700°C', color='#000000')
+        # label20 = np.array([33, 94, 1]) @ np.transpose(A)
+        # ax1.text(label20[0], label20[1], 'T3', color='#000000')
+        # label21 = np.array([36, 88, 1]) @ np.transpose(A)
+        # ax1.text(label21[0], label21[1], 'Thermal fault', color='#000000')
+        # label22 = np.array([39, 82, 1]) @ np.transpose(A)
+        # ax1.text(label22[0], label22[1], 't > 700°C', color='#000000')
+        fault = "T3 - Thermal fault, t > 700°C"
     #
     # Show the final plot
     #
@@ -494,11 +522,13 @@ def dt5(ethylene, methane, ethane):
     ax1.get_yaxis().set_visible(False)
 
     plt.savefig('dga/static/images/dt5.png')
+    
+    return fault
 
 
 def centroid(c2h6, h2, c2h2, c2h4, ch4):
     gas = [c2h6, h2, c2h2, c2h4, ch4]
-    print(gas)
+    # print(gas)
 
     total = sum(gas)
     count = 0
@@ -545,8 +575,8 @@ def centroid(c2h6, h2, c2h2, c2h4, ch4):
     cy = ((y[0] + y[1]) * a[0]) + ((y[1] + y[2]) * a[1]) + ((y[2] + y[3]) * a[2]) + ((y[3] + y[4]) * a[3]) + (
             (y[4] + y[0]) * a[4])
     Cy = cy * (1 / (6 * area))
-    print("Cx = ", Cx)
-    print("Cx = ", Cy)
+    # print("Cx = ", Cx)
+    # print("Cx = ", Cy)
 
     return [Cx, Cy, 1]
 
@@ -612,7 +642,7 @@ def pentagon1(c2h6, h2, c2h2, c2h4, ch4):
     ax1.fill(region_D1[:, 0], region_D1[:, 1], '#eca9fc')
     ax1.fill(region_D2[:, 0], region_D2[:, 1], '#B8F198')
 
-    ax1.scatter(sample_point[0], sample_point[1], marker='x', c='r', zorder=2)
+    ax1.scatter(sample_point[0], sample_point[1], marker='x', c='r', zorder=2) # type: ignore
     ax1.grid(linestyle='--', alpha=0.4, axis='both')
 
     #
@@ -649,6 +679,7 @@ def pentagon1(c2h6, h2, c2h2, c2h4, ch4):
     ax1.set_ylim(-45, 50)
     ax1.get_xaxis().set_visible(False)
     ax1.get_yaxis().set_visible(False)
+    
     plt.savefig('dga/static/images/dp1.png')
 
 
@@ -716,7 +747,7 @@ def pentagon2(c2h6, h2, c2h2, c2h4, ch4):
     ax1.fill(region_D1[:, 0], region_D1[:, 1], '#eca9fc')
     ax1.fill(region_D2[:, 0], region_D2[:, 1], '#B8F198')
 
-    ax1.scatter(sample_point[0], sample_point[1], marker='x', c='r', zorder=2)
+    ax1.scatter(sample_point[0], sample_point[1], marker='x', c='r', zorder=2) # type: ignore
     ax1.grid(linestyle='--', alpha=0.4, axis='both')
 
     #
@@ -753,4 +784,5 @@ def pentagon2(c2h6, h2, c2h2, c2h4, ch4):
     ax1.set_ylim(-45, 50)
     ax1.get_xaxis().set_visible(False)
     ax1.get_yaxis().set_visible(False)
+    
     plt.savefig('dga/static/images/dp2.png')

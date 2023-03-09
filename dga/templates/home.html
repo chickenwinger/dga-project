@@ -23,7 +23,7 @@
       <div class="container">
         <nav class="nav-bar">
           <div>
-            <p class="fs-primary-heading fw-bold text-accent-400">DGA 4 U</p>
+            <p class="fs-primary-heading fw-bold text-accent-400">DGA PUTRA</p>
           </div>
           <ul class="text-neutral-100 fw-semi-bold fs-600">
             <li><a href="{{ url_for('rtdatabase.home') }}">Home</a></li>
@@ -37,7 +37,7 @@
     <main>
       <div class="container bg-accent-400">
         <div class="even-columns">
-          <form class="input-wrap dga" method="POST">
+          <form class="input-wrap dga" autocomplete="off" method="POST">
             <div class="fs-secondary-heading fw-semi-bold">
               <p>Input the following DGA values</p>
             </div>
@@ -155,7 +155,9 @@
             </div>
             <div class="input">
               <div class="label">
-                <label for="totalcombustibles">Total Dissolve Combustibles</label>
+                <label for="totalcombustibles"
+                  >Total Dissolve Combustibles</label
+                >
               </div>
               <input
                 type="text"
@@ -170,26 +172,52 @@
             </div>
             {% include 'flash_messages.html' %}
             <div>
-              <button class="button" type="submit" name="action" value="record">Record</button>
+              <button class="button" type="submit" name="action" value="record">
+                Record
+              </button>
             </div>
           </form>
           <form class="image-wrap" method="POST">
-            <div class="select">
-              <select id="selection" name="action" method="POST" onchange="this.form.submit()" action="/home">
-                <option value="">Choose a tool</option>
-                <option name="action" value="triangle1">Duval Triangle 1</option>
-                <option name="action" value="triangle4">Duval Triangle 4</option>
-                <option name="action" value="triangle5">Duval Triangle 5</option>
-                <option name="action" value="pentagon1">Duval Pentagon 1</option>
-                <option name="action" value="pentagon2">Duval Pentagon 2</option>
-              </select>
-            </div>
+              <div>
+                <h2
+                  class="text-primary-900 fw-semi-bold fs-600"
+                  style="margin-bottom: 10px"
+                >
+                  Result of {{ record_name }}
+                </h2>
+              </div>
+              <div class="select">
+                <select
+                  id="selection"
+                  name="action"
+                  method="POST"
+                  onchange="this.form.submit()"
+                  action="/home"
+                >
+                  <option value="">Choose a tool</option>
+                  <option name="action" value="triangle1">
+                    Duval Triangle 1
+                  </option>
+                  <option name="action" value="triangle4">
+                    Duval Triangle 4
+                  </option>
+                  <option name="action" value="triangle5">
+                    Duval Triangle 5
+                  </option>
+                  <option name="action" value="pentagon1">
+                    Duval Pentagon 1
+                  </option>
+                  <option name="action" value="pentagon2">
+                    Duval Pentagon 2
+                  </option>
+                </select>
+              </div>
             <div class="image-frame">{% include 'imagedisplay.html' %}</div>
-            <div class="fs-400 fw-semi-bold">
-              <!-- Type of fault: <output name="fault"></output> -->
+            <div class="fs-400 fw-semi-bold" style="color: firebrick">
+              Type of fault: {{ fault }}
             </div>
           </form>
-        </form>
+        </div>
       </div>
     </main>
   </body>

@@ -20,8 +20,8 @@ def index():
         except: 
             flash('Invalid username/password combination', 'error')
             return redirect(url_for('authentication.index'))
-
-    return render_template('index.html')
+    else:
+        return render_template('index.html')
 
 
 @authentication.route('/logout')
@@ -64,8 +64,8 @@ def registration():
             print(e)
             flash('Email already exists', 'error')
             return redirect(url_for('authentication.registration'))
-
-    return render_template('registration.html')
+    else:
+        return render_template('registration.html')
 
 # def get_user_id_by_email(email):
 #     user = auth.get_account_info(auth.current_user['idToken'])['localId']

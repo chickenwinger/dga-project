@@ -27,7 +27,10 @@ def home():
             # print(get_last_record())
         else:
             ordered_dict = get_last_record()
-            record_query = next(iter(ordered_dict.values()))
+            print(ordered_dict)
+            record_name = next(iter(ordered_dict.keys())) # type: ignore
+            record_query = next(iter(ordered_dict.values())) # type: ignore
+            
             hydrogen = int(record_query['hydrogen'])
             methane = int(record_query['methane'])
             acetylene = int(record_query['acetylene'])
@@ -36,32 +39,46 @@ def home():
             cmonoxide = int(record_query['cmonoxide'])
             cdioxide = int(record_query['cdioxide'])
             
-            dt1(ethylene, methane, acetylene)
-            dt4(methane, hydrogen, ethane)
-            dt5(ethylene, methane, ethane)
-            pentagon1(ethane, hydrogen, acetylene, ethylene, methane)
-            pentagon2(ethane, hydrogen, acetylene, ethylene, methane)
+            fault1 = dt1(ethylene, methane, acetylene)
+            fault2 = dt4(methane, hydrogen, ethane)
+            fault3 = dt5(ethylene, methane, ethane)
+            fault4 = pentagon1(ethane, hydrogen, acetylene, ethylene, methane)
+            fault5 = pentagon2(ethane, hydrogen, acetylene, ethylene, methane)
             
             img = None
+            fault_type = None
             if request.form['action'] == 'triangle1':
                 img = 1
+                fault_type = fault1
             if request.form['action'] == 'triangle4':
                 img = 2
+                fault_type = fault2
             if request.form['action'] == 'triangle5':
                 img = 3
+                fault_type = fault3
             if request.form['action'] == 'pentagon1':
                 img = 4
+                fault_type = fault4
             if request.form['action'] == 'pentagon2':
                 img = 5
+                fault_type = fault5
                 
-            return render_template("home.html", img = img)
-        
-    return render_template("home.html")
+            return render_template("home.html", img = img, fault = fault_type, record_name = record_name)
+    else: 
+        return render_template("home.html")
 
 
 @rtdatabase.route("/records")
 @login_required
 def records():
+    if request.method == 'POST':
+        print(request.form)
+        if request.form['action'] == 'delete':
+            user = auth.get_account_info(session['idToken'])['users'][0]
+            record = request.form.get('record')
+            db.child('records').child(user['localId']).child(record).remove()
+            flash('Record deleted successfully', 'msg')
+            return redirect(url_for('rtdatabase.records'))
     return render_template("records.html")
 
 
