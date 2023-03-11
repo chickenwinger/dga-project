@@ -15,6 +15,7 @@
       type="text/css"
       href="{{ url_for('static', filename='styles.css') }}"
     />
+
     <title>DGAPUTRA</title>
   </head>
 
@@ -35,45 +36,72 @@
     </header>
 
     <main>
-      <div class="container bg-accent-400">
+      <div class="container bg-accent-400" style="min-height: 100vh">
         <div class="even-columns">
-          <form class="input-wrap dga">
+          <div class="input-wrap dga">
             <div class="fs-secondary-heading fw-semi-bold">
               <p>Records</p>
             </div>
-              {% for l in t %}
-              <ul class="list-group">
-                <li class="list-group-item">{{l}}</li>
-              </ul>
+            <div class="list-group">
+              {% for key, timestamp in kt.items() %}
+              <a
+                href="{{ url_for('rtdatabase.records', record_name=key) }}"
+                class="list-group-item"
+                name="{{ key }}"
+                {% if key == record_selected %} style="border: 1px solid var(--clr-primary-400);" {% endif %}
+                aria-current="true"
+              >
+                <div>
+                  <h5 class="fw-semi-bold fs-400">{{ key }}</h5>
+                </div>
+                <small class="fs-300" style="color: grey">
+                  {{ timestamp }}
+                </small>
+              </a>
               {% endfor %}
-            <div>
-              <button class="button" type="submit">Show</button>
             </div>
-          </form>
-          <form class="image-wrap">
+            {% include 'flash_messages.html' %}
+            <form method="POST">
+              <button class="button delete" type="submit" name="action" value="delete">Delete</button>
+            </form>
+          </div>
+          <form class="image-wrap" method="POST">
             <div>
               <h2
                 class="text-primary-900 fw-semi-bold fs-600"
                 style="margin-bottom: 10px"
               >
-                Result of {{ record_name }}
+                Record
               </h2>
             </div>
             <div class="select">
-              <select id="selection">
-                <option value="triange1">Duval Triangle 1</option>
-                <option value="triange4">Duval Triangle 4</option>
-                <option value="triange5">Duval Triangle 5</option>
-                <option value="pentagon1">Duval Pentagon 1</option>
-                <option value="pentagon2">Duval Pentagon 2</option>
+              <select
+                id="selection"
+                name="action"
+                method="POST"
+                onchange="this.form.submit()"
+                action="/home"
+              >
+                <option value="">Choose a tool</option>
+                <option name="action" value="triangle1" {% if selected_val == "triangle1" %} selected {% endif %}>
+                  Duval Triangle 1
+                </option>
+                <option name="action" value="triangle4" {% if selected_val == "triangle4" %} selected {% endif %}>
+                  Duval Triangle 4
+                </option>
+                <option name="action" value="triangle5" {% if selected_val == "triangle5" %} selected {% endif %}>
+                  Duval Triangle 5
+                </option>
+                <option name="action" value="pentagon1" {% if selected_val == "pentagon1" %} selected {% endif %}>
+                  Duval Pentagon 1
+                </option>
+                <option name="action" value="pentagon2" {% if selected_val == "pentagon2" %} selected {% endif %}>
+                  Duval Pentagon 2
+                </option>
               </select>
             </div>
-            <div class="image-frame">
-              <output name="image">
-                <img src="" alt="DGA tool" />
-              </output>
-            </div>
-            <div class="fs-400 fw-semi-bold"  style="color: firebrick;">
+            <div class="image-frame">{% include 'imagedisplay.html' %}</div>
+            <div class="fs-400 fw-semi-bold" style="color: firebrick">
               Type of fault: {{ fault }}
             </div>
           </form>

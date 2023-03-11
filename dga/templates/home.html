@@ -178,40 +178,40 @@
             </div>
           </form>
           <form class="image-wrap" method="POST">
-              <div>
-                <h2
-                  class="text-primary-900 fw-semi-bold fs-600"
-                  style="margin-bottom: 10px"
-                >
-                  Result of {{ record_name }}
-                </h2>
-              </div>
-              <div class="select">
-                <select
-                  id="selection"
-                  name="action"
-                  method="POST"
-                  onchange="this.form.submit()"
-                  action="/home"
-                >
-                  <option value="">Choose a tool</option>
-                  <option name="action" value="triangle1">
-                    Duval Triangle 1
-                  </option>
-                  <option name="action" value="triangle4">
-                    Duval Triangle 4
-                  </option>
-                  <option name="action" value="triangle5">
-                    Duval Triangle 5
-                  </option>
-                  <option name="action" value="pentagon1">
-                    Duval Pentagon 1
-                  </option>
-                  <option name="action" value="pentagon2">
-                    Duval Pentagon 2
-                  </option>
-                </select>
-              </div>
+            <div>
+              <h2
+                class="text-primary-900 fw-semi-bold fs-600"
+                style="margin-bottom: 10px"
+              >
+                Result of latest record: {{ record_name }}
+              </h2>
+            </div>
+            <div class="select">
+              <select
+                id="selection"
+                name="action"
+                method="POST"
+                onchange="this.form.submit()"
+                action="/home"
+              >
+                <option value="">Choose a tool</option>
+                <option name="action" value="triangle1" {% if selected_val == "triangle1" %} selected {% endif %}>
+                  Duval Triangle 1
+                </option>
+                <option name="action" value="triangle4" {% if selected_val == "triangle4" %} selected {% endif %}>
+                  Duval Triangle 4
+                </option>
+                <option name="action" value="triangle5" {% if selected_val == "triangle5" %} selected {% endif %}>
+                  Duval Triangle 5
+                </option>
+                <option name="action" value="pentagon1" {% if selected_val == "pentagon1" %} selected {% endif %}>
+                  Duval Pentagon 1
+                </option>
+                <option name="action" value="pentagon2" {% if selected_val == "pentagon2" %} selected {% endif %}>
+                  Duval Pentagon 2
+                </option>
+              </select>
+            </div>
             <div class="image-frame">{% include 'imagedisplay.html' %}</div>
             <div class="fs-400 fw-semi-bold" style="color: firebrick">
               Type of fault: {{ fault }}

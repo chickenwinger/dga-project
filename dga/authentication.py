@@ -13,7 +13,7 @@ def index():
 
         try:
             user = auth.sign_in_with_email_and_password(email, password)
-            print(auth.get_account_info(user['idToken']))
+            # print(auth.get_account_info(user['idToken']))
             # print(auth.current_user)
             session['idToken'] = user['idToken']
             return redirect(url_for('rtdatabase.home'))
