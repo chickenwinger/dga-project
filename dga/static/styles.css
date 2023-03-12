@@ -424,16 +424,24 @@ select {
   border-left: 5px solid transparent;
 }
 
+.empty-block {
+  min-height: 350px;
+  height: 480px;
+  width: 100%;
+}
 
 /* image styles */
 
+.image-frame {
+  position: relative;
+  width: 640px;
+  height: 480px;
+}
+
 .image-display {
+  position: absolute;
+  height: 100%;
   width: 100%;
-  height: auto;
-  width: auto;
-  margin: auto;
-  min-width: 350px;
-  max-width: 100%;
 }
 
 

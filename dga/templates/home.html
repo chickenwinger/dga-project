@@ -212,7 +212,10 @@
                 </option>
               </select>
             </div>
-            <div class="image-frame">{% include 'imagedisplay.html' %}</div>
+            <div class="image-frame">
+              {% include 'imagedisplay.html' %}
+              <div class="empty-block"></div>
+            </div>
             <div class="fs-400 fw-semi-bold" style="color: firebrick">
               Type of fault: {{ fault }}
             </div>
