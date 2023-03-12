@@ -100,6 +100,7 @@ def records():
             if record_selected == '':
                 flash('Please select a record', 'error')
                 return render_template("records.html", kt = keys_and_timestamps)
+            
             ordered_dict = get_record(user, record_selected)
             query_dict = dict(ordered_dict)
             print(query_dict)
