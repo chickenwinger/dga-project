@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <title>DGAPUTRA</title>
+  </head>
+
+  <body>
+    <header class="header bg-primary-400">
+      <div class="container">
+        <nav class="nav-bar">
+          <div>
+            <p class="fs-primary-heading fw-bold text-accent-400">DGA PUTRA</p>
+          </div>
+          <ul class="text-neutral-100 fw-semi-bold fs-600">
+            <li><a href="{{ url_for('rtdatabase.home') }}">Home</a></li>
+            <li><a href="{{ url_for('rtdatabase.records') }}">Records</a></li>
+            <li><a href="{{ url_for('authentication.logout') }}">Logout</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main>{% block content %}{% endblock %}</main>
+  </body>
+</html>

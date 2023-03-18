@@ -1,70 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
     <title>DGAPUTRA</title>
-</head>
+  </head>
 
-<body class="bg-primary-400">
+  <body class="bg-primary-400">
     <div class="login-form">
-        <form class="even-columns bg-accent-400" method="POST">
-            <div>
-                <div class="form-image">
-                    <img src="static/images/index.jpg" alt="">
-                </div>
-                <div class="form-description">
-                    <p class="fs-primary-heading fw-bold text-primary-900">Registration</p>
-                    <p>
-                        Please enter your details correctly.
-                    </p>
-                </div>
+      <form class="even-columns bg-accent-400" method="POST">
+        <div>
+          <div class="form-image">
+            <img src="static/images/index.jpg" alt="" />
+          </div>
+          <div class="form-description">
+            <p class="fs-primary-heading fw-bold text-primary-900">
+              Registration
+            </p>
+            <p>Please enter your details correctly.</p>
+          </div>
+        </div>
+        <div class="input-wrap">
+          <div class="input">
+            <div class="label">
+              <label for="email">Email</label>
             </div>
-            <div class="input-wrap">
-                <div class="input">
-                    <div class="label">
-                        <label for="email">Email</label>
-                    </div>
-                    <input type="text" id="email" name="email">
-                </div>
-                <div class="input">
-                    <div class="label">
-                        <label for="password">Password</label>
-                    </div>
-                    <input type="password" id="password" name="password" required minlength="7"
-                        placeholder="7 characters minimum">
-                    <span class="validity"></span>
-                </div>
-                <div class="input">
-                    <div class="label">
-                        <label for="password">Confirmed Password</label>
-                    </div>
-                    <input type="password" id="cpassword" name="cpassword" required minlength="7"
-                        placeholder="7 characters minimum">
-                    <span class="validity"></span>
-                </div>
-                <div>
-                    {% include 'flash_messages.html' %}
-                </div>
-                <div class="form-button">
-                    <button class="button" type="submit">Register</button>
-
-                </div>
-                <div>
-                    <a href="{{ url_for('authentication.index') }}" class="fs-300 fw-semi-bold text-primary-900">Sign in here</a>
-                </div>
+            <input type="text" id="email" name="email" />
+          </div>
+          <div class="input">
+            <div class="label">
+              <label for="password">Password</label>
             </div>
-        </form>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              minlength="7"
+              placeholder="7 characters minimum"
+            />
+            <span class="validity"></span>
+          </div>
+          <div class="input">
+            <div class="label">
+              <label for="password">Confirmed Password</label>
+            </div>
+            <input
+              type="password"
+              id="cpassword"
+              name="cpassword"
+              required
+              minlength="7"
+              placeholder="7 characters minimum"
+            />
+            <span class="validity"></span>
+          </div>
+          <div>{% include 'flash_messages.html' %}</div>
+          <div class="form-button">
+            <button class="button" type="submit">Register</button>
+          </div>
+          <div>
+            <a
+              href="{{ url_for('authentication.index') }}"
+              class="fs-300 fw-semi-bold text-primary-900"
+              >Sign in here</a
+            >
+          </div>
+        </div>
+      </form>
     </div>
-
-
-
-</body>
-
+  </body>
 </html>

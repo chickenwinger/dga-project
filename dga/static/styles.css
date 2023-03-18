@@ -265,6 +265,7 @@ input:valid + span::after {
   gap: 1rem;
   padding: 6rem;
   margin: 2rem;
+  align-self: flex-start;
 }
 .image-wrap img {
   width: 100%;

@@ -1,112 +1,78 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{{ url_for('static', filename='styles.css') }}"
-    />
-
-    <title>DGAPUTRA</title>
-  </head>
-
-  <body>
-    <header class="header bg-primary-400">
-      <div class="container">
-        <nav class="nav-bar">
+{% extends "base.html" %}
+{% block content %}
+<div class="container bg-accent-400" style="min-height: 100vh">
+  <div class="even-columns">
+    <div class="input-wrap dga">
+      <div class="fs-secondary-heading fw-semi-bold">
+        <p>Records</p>
+      </div>
+      <div class="list-group">
+        {% for key, timestamp in kt.items() %}
+        {% if key == "No records found" %} <em>No records found</em>
+        {% else %}
+        <a
+          href="{{ url_for('rtdatabase.records', record_name=key) }}"
+          class="list-group-item"
+          name="{{ key }}"
+          {% if key == record_selected %} style="border: 1px solid var(--clr-primary-400);" {% endif %}
+          aria-current="true"
+        >
           <div>
-            <p class="fs-primary-heading fw-bold text-accent-400">DGA PUTRA</p>
+            <h5 class="fw-semi-bold fs-400">{{ key }}</h5>
           </div>
-          <ul class="text-neutral-100 fw-semi-bold fs-600">
-            <li><a href="{{ url_for('rtdatabase.home') }}">Home</a></li>
-            <li><a href="{{ url_for('rtdatabase.records') }}">Records</a></li>
-            <li><a href="{{ url_for('authentication.logout') }}">Logout</a></li>
-          </ul>
-        </nav>
+          <small class="fs-300" style="color: grey">
+            {{ timestamp }}
+          </small>
+        </a>
+        {% endif %}
+        {% endfor %}
       </div>
-    </header>
-
-    <main>
-      <div class="container bg-accent-400" style="min-height: 100vh">
-        <div class="even-columns">
-          <div class="input-wrap dga">
-            <div class="fs-secondary-heading fw-semi-bold">
-              <p>Records</p>
-            </div>
-            <div class="list-group">
-              {% for key, timestamp in kt.items() %}
-              <a
-                href="{{ url_for('rtdatabase.records', record_name=key) }}"
-                class="list-group-item"
-                name="{{ key }}"
-                {% if key == record_selected %} style="border: 1px solid var(--clr-primary-400);" {% endif %}
-                aria-current="true"
-              >
-                <div>
-                  <h5 class="fw-semi-bold fs-400">{{ key }}</h5>
-                </div>
-                <small class="fs-300" style="color: grey">
-                  {{ timestamp }}
-                </small>
-              </a>
-              {% endfor %}
-            </div>
-            {% include 'flash_messages.html' %}
-            <form method="POST">
-              <button class="button delete" type="submit" name="action" value="delete">Delete</button>
-            </form>
-          </div>
-          <form class="image-wrap" method="POST">
-            <div>
-              <h2
-                class="text-primary-900 fw-semi-bold fs-600"
-                style="margin-bottom: 10px"
-              >
-                Record
-              </h2>
-            </div>
-            <div class="select">
-              <select
-                id="selection"
-                name="action"
-                method="POST"
-                onchange="this.form.submit()"
-                action="/home"
-              >
-                <option value="">Choose a tool</option>
-                <option name="action" value="triangle1" {% if selected_val == "triangle1" %} selected {% endif %}>
-                  Duval Triangle 1
-                </option>
-                <option name="action" value="triangle4" {% if selected_val == "triangle4" %} selected {% endif %}>
-                  Duval Triangle 4
-                </option>
-                <option name="action" value="triangle5" {% if selected_val == "triangle5" %} selected {% endif %}>
-                  Duval Triangle 5
-                </option>
-                <option name="action" value="pentagon1" {% if selected_val == "pentagon1" %} selected {% endif %}>
-                  Duval Pentagon 1
-                </option>
-                <option name="action" value="pentagon2" {% if selected_val == "pentagon2" %} selected {% endif %}>
-                  Duval Pentagon 2
-                </option>
-              </select>
-            </div>
-            <div class="image-frame">{% include 'imagedisplay.html' %}</div>
-            <div class="fs-400 fw-semi-bold" style="color: firebrick">
-              Type of fault: {{ fault }}
-            </div>
-          </form>
-        </div>
+      {% include 'flash_messages.html' %}
+      <form method="POST">
+        <button class="button delete" type="submit" name="action" value="delete">Delete</button>
+        <button class="button" title="Send results to your email" type="submit" name="action" value="delete">Delete</button>
+      </form>
+    </div>
+    <form class="image-wrap" method="POST">
+      <div>
+        <h2
+          class="text-primary-900 fw-semi-bold fs-600"
+          style="margin-bottom: 10px"
+        >
+          Record
+        </h2>
       </div>
-    </main>
-  </body>
-</html>
+      <div class="select">
+        <select
+          id="selection"
+          name="action"
+          method="POST"
+          onchange="this.form.submit()"
+          action="/home"
+        >
+          <option value="">Choose a tool</option>
+          <option name="action" value="triangle1" {% if selected_val == "triangle1" %} selected {% endif %}>
+            Duval Triangle 1
+          </option>
+          <option name="action" value="triangle4" {% if selected_val == "triangle4" %} selected {% endif %}>
+            Duval Triangle 4
+          </option>
+          <option name="action" value="triangle5" {% if selected_val == "triangle5" %} selected {% endif %}>
+            Duval Triangle 5
+          </option>
+          <option name="action" value="pentagon1" {% if selected_val == "pentagon1" %} selected {% endif %}>
+            Duval Pentagon 1
+          </option>
+          <option name="action" value="pentagon2" {% if selected_val == "pentagon2" %} selected {% endif %}>
+            Duval Pentagon 2
+          </option>
+        </select>
+      </div>
+      <div class="image-frame">{% include 'imagedisplay.html' %}</div>
+      <div class="fs-400 fw-semi-bold" style="color: firebrick">
+        Type of fault: {{ fault }}
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

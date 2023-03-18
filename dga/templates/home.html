@@ -1,227 +1,190 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{{ url_for('static', filename='styles.css') }}"
-    />
-    <title>DGAPUTRA</title>
-  </head>
-
-  <body>
-    <header class="header bg-primary-400">
-      <div class="container">
-        <nav class="nav-bar">
-          <div>
-            <p class="fs-primary-heading fw-bold text-accent-400">DGA PUTRA</p>
-          </div>
-          <ul class="text-neutral-100 fw-semi-bold fs-600">
-            <li><a href="{{ url_for('rtdatabase.home') }}">Home</a></li>
-            <li><a href="{{ url_for('rtdatabase.records') }}">Records</a></li>
-            <li><a href="{{ url_for('authentication.logout') }}">Logout</a></li>
-          </ul>
-        </nav>
+{% extends "base.html" %}
+{% block content %}
+<div class="container bg-accent-400">
+  <div class="even-columns">
+    <form class="input-wrap dga" style="align-self: flex-start;" autocomplete="off" method="POST">
+      <div class="fs-secondary-heading fw-semi-bold">
+        <p>Input the following DGA values</p>
       </div>
-    </header>
-
-    <main>
-      <div class="container bg-accent-400">
-        <div class="even-columns">
-          <form class="input-wrap dga" autocomplete="off" method="POST">
-            <div class="fs-secondary-heading fw-semi-bold">
-              <p>Input the following DGA values</p>
-            </div>
-            <div class="input">
-              <div class="label">
-                <label for="rname">Record Name</label>
-              </div>
-              <input type="text" id="rname" name="rname" required />
-              <span class="validity"></span>
-            </div>
-            <div class="input">
-              <div class="label">
-                <label for="hydrogenconc">Hydrogen Concentration</label>
-              </div>
-              <input
-                type="text"
-                id="hydrogenconc"
-                name="hydrogenconc"
-                value="{{ request.form['hydrogenconc'] }}"
-                required
-                pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
-                placeholder="Insert value 0-100"
-              />
-              <span class="validity"></span>
-            </div>
-            <div class="input">
-              <div class="label">
-                <label for="methaneconc">Methane Concentration</label>
-              </div>
-              <input
-                type="text"
-                id="methaneconc"
-                name="methaneconc"
-                value="{{ request.form['methaneconc'] }}"
-                required
-                pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
-                placeholder="Insert value 0-100"
-              />
-              <span class="validity"></span>
-            </div>
-            <div class="input">
-              <div class="label">
-                <label for="acetyleneconc">Acetylene Concentration</label>
-              </div>
-              <input
-                type="text"
-                id="acetyleneconc"
-                name="acetyleneconc"
-                value="{{ request.form['acetyleneconc'] }}"
-                required
-                pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
-                placeholder="Insert value 0-100"
-              />
-              <span class="validity"></span>
-            </div>
-            <div class="input">
-              <div class="label">
-                <label for="ethyleneconc">Ethylene Concentration</label>
-              </div>
-              <input
-                type="text"
-                id="ethyleneconc"
-                name="ethyleneconc"
-                value="{{ request.form['ethyleneconc'] }}"
-                required
-                pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
-                placeholder="Insert value 0-100"
-              />
-              <span class="validity"></span>
-            </div>
-            <div class="input">
-              <div class="label">
-                <label for="ethaneconc">Ethane Concentration</label>
-              </div>
-              <input
-                type="text"
-                id="ethaneconc"
-                name="ethaneconc"
-                value="{{ request.form['ethaneconc'] }}"
-                required
-                pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
-                placeholder="Insert value 0-100"
-              />
-              <span class="validity"></span>
-            </div>
-            <div class="input">
-              <div class="label">
-                <label for="cmonoxideconc">Carbon Monoxide Concentration</label>
-              </div>
-              <input
-                type="text"
-                id="cmonoxideconc"
-                name="cmonoxideconc"
-                value="{{ request.form['cmonoxideconc'] }}"
-                required
-                pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
-                placeholder="Insert value 0-100"
-              />
-              <span class="validity"></span>
-            </div>
-            <div class="input">
-              <div class="label">
-                <label for="cdioxideconc">Carbon Dioxide Concentration</label>
-              </div>
-              <input
-                type="text"
-                id="cdioxideconc"
-                name="cdioxideconc"
-                value="{{ request.form['cdioxideconc'] }}"
-                required
-                pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
-                placeholder="Insert value 0-100"
-              />
-              <span class="validity"></span>
-            </div>
-            <div class="input">
-              <div class="label">
-                <label for="totalcombustibles"
-                  >Total Dissolve Combustibles</label
-                >
-              </div>
-              <input
-                type="text"
-                id="totalcombustibles"
-                name="totalcombustibles"
-                value="{{ request.form['totalcombustibles'] }}"
-                required
-                pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
-                placeholder="Insert value 0-100"
-              />
-              <span class="validity"></span>
-            </div>
-            {% include 'flash_messages.html' %}
-            <div>
-              <button class="button" type="submit" name="action" value="record">
-                Record
-              </button>
-            </div>
-          </form>
-          <form class="image-wrap" method="POST">
-            <div>
-              <h2
-                class="text-primary-900 fw-semi-bold fs-600"
-                style="margin-bottom: 10px"
-              >
-                Result of latest record: {{ record_name }}
-              </h2>
-            </div>
-            <div class="select">
-              <select
-                id="selection"
-                name="action"
-                method="POST"
-                onchange="this.form.submit()"
-                action="/home"
-              >
-                <option value="">Choose a tool</option>
-                <option name="action" value="triangle1" {% if selected_val == "triangle1" %} selected {% endif %}>
-                  Duval Triangle 1
-                </option>
-                <option name="action" value="triangle4" {% if selected_val == "triangle4" %} selected {% endif %}>
-                  Duval Triangle 4
-                </option>
-                <option name="action" value="triangle5" {% if selected_val == "triangle5" %} selected {% endif %}>
-                  Duval Triangle 5
-                </option>
-                <option name="action" value="pentagon1" {% if selected_val == "pentagon1" %} selected {% endif %}>
-                  Duval Pentagon 1
-                </option>
-                <option name="action" value="pentagon2" {% if selected_val == "pentagon2" %} selected {% endif %}>
-                  Duval Pentagon 2
-                </option>
-              </select>
-            </div>
-            <div class="image-frame">
-              {% include 'imagedisplay.html' %}
-              <div class="empty-block"></div>
-            </div>
-            <div class="fs-400 fw-semi-bold" style="color: firebrick">
-              Type of fault: {{ fault }}
-            </div>
-          </form>
+      <div class="input">
+        <div class="label">
+          <label for="rname">Record Name</label>
         </div>
+        <input type="text" id="rname" name="rname" required />
+        <span class="validity"></span>
       </div>
-    </main>
-  </body>
-</html>
+      <div class="input">
+        <div class="label">
+          <label for="hydrogenconc">Hydrogen Concentration</label>
+        </div>
+        <input
+          type="text"
+          id="hydrogenconc"
+          name="hydrogenconc"
+          value="{{ request.form['hydrogenconc'] }}"
+          required
+          pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
+          placeholder="Insert value 0-100"
+        />
+        <span class="validity"></span>
+      </div>
+      <div class="input">
+        <div class="label">
+          <label for="methaneconc">Methane Concentration</label>
+        </div>
+        <input
+          type="text"
+          id="methaneconc"
+          name="methaneconc"
+          value="{{ request.form['methaneconc'] }}"
+          required
+          pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
+          placeholder="Insert value 0-100"
+        />
+        <span class="validity"></span>
+      </div>
+      <div class="input">
+        <div class="label">
+          <label for="acetyleneconc">Acetylene Concentration</label>
+        </div>
+        <input
+          type="text"
+          id="acetyleneconc"
+          name="acetyleneconc"
+          value="{{ request.form['acetyleneconc'] }}"
+          required
+          pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
+          placeholder="Insert value 0-100"
+        />
+        <span class="validity"></span>
+      </div>
+      <div class="input">
+        <div class="label">
+          <label for="ethyleneconc">Ethylene Concentration</label>
+        </div>
+        <input
+          type="text"
+          id="ethyleneconc"
+          name="ethyleneconc"
+          value="{{ request.form['ethyleneconc'] }}"
+          required
+          pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
+          placeholder="Insert value 0-100"
+        />
+        <span class="validity"></span>
+      </div>
+      <div class="input">
+        <div class="label">
+          <label for="ethaneconc">Ethane Concentration</label>
+        </div>
+        <input
+          type="text"
+          id="ethaneconc"
+          name="ethaneconc"
+          value="{{ request.form['ethaneconc'] }}"
+          required
+          pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
+          placeholder="Insert value 0-100"
+        />
+        <span class="validity"></span>
+      </div>
+      <div class="input">
+        <div class="label">
+          <label for="cmonoxideconc">Carbon Monoxide Concentration</label>
+        </div>
+        <input
+          type="text"
+          id="cmonoxideconc"
+          name="cmonoxideconc"
+          value="{{ request.form['cmonoxideconc'] }}"
+          required
+          pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
+          placeholder="Insert value 0-100"
+        />
+        <span class="validity"></span>
+      </div>
+      <div class="input">
+        <div class="label">
+          <label for="cdioxideconc">Carbon Dioxide Concentration</label>
+        </div>
+        <input
+          type="text"
+          id="cdioxideconc"
+          name="cdioxideconc"
+          value="{{ request.form['cdioxideconc'] }}"
+          required
+          pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
+          placeholder="Insert value 0-100"
+        />
+        <span class="validity"></span>
+      </div>
+      <div class="input">
+        <div class="label">
+          <label for="totalcombustibles"
+            >Total Dissolve Combustibles</label
+          >
+        </div>
+        <input
+          type="text"
+          id="totalcombustibles"
+          name="totalcombustibles"
+          value="{{ request.form['totalcombustibles'] }}"
+          required
+          pattern="^(100(\.0+)?|\d{1,2}(\.\d+)?)$"
+          placeholder="Insert value 0-100"
+        />
+        <span class="validity"></span>
+      </div>
+      {% include 'flash_messages.html' %}
+      <div>
+        <button class="button" type="submit" name="action" value="record">
+          Record
+        </button>
+      </div>
+    </form>
+    <form class="image-wrap" method="POST">
+      <div>
+        <h2
+          class="text-primary-900 fw-semi-bold fs-600"
+          style="margin-bottom: 10px"
+        >
+          Result of latest record: {{ record_name }}
+        </h2>
+      </div>
+      <div class="select">
+        <select
+          id="selection"
+          name="action"
+          method="POST"
+          onchange="this.form.submit()"
+          action="/home"
+        >
+          <option value="">Choose a tool</option>
+          <option name="action" value="triangle1" {% if selected_val == "triangle1" %} selected {% endif %}>
+            Duval Triangle 1
+          </option>
+          <option name="action" value="triangle4" {% if selected_val == "triangle4" %} selected {% endif %}>
+            Duval Triangle 4
+          </option>
+          <option name="action" value="triangle5" {% if selected_val == "triangle5" %} selected {% endif %}>
+            Duval Triangle 5
+          </option>
+          <option name="action" value="pentagon1" {% if selected_val == "pentagon1" %} selected {% endif %}>
+            Duval Pentagon 1
+          </option>
+          <option name="action" value="pentagon2" {% if selected_val == "pentagon2" %} selected {% endif %}>
+            Duval Pentagon 2
+          </option>
+        </select>
+      </div>
+      <div class="image-frame">
+        {% include 'imagedisplay.html' %}
+        <div class="empty-block"></div>
+      </div>
+      <div class="fs-400 fw-semi-bold" style="color: firebrick">
+        Type of fault: {{ fault }}
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
