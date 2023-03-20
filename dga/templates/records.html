@@ -28,9 +28,23 @@
         {% endfor %}
       </div>
       {% include 'flash_messages.html' %}
-      <form method="POST">
-        <button class="button delete" type="submit" name="action" value="delete">Delete</button>
-        <button class="button" title="Send results to your email" type="submit" name="action" value="delete">Delete</button>
+      <form class="form-button" method="POST">
+        <button 
+          class="button delete" 
+          type="submit" 
+          name="action" 
+          value="delete"
+        >
+          Delete
+        </button>
+        <button 
+          class="button mail" 
+          title="Send results to your email" 
+          type="submit" 
+          name="action" 
+          value="email">
+          <img src="static/images/email.png" alt="Send mail">
+        </button>
       </form>
     </div>
     <form class="image-wrap" method="POST">
