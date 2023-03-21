@@ -145,15 +145,15 @@ def records():
                 for key, value in query_dict.items():
                     message_body += f"{key}: {value}\n"
                     
-                with app.open_resource("static\\images\\dt1.png") as fp:
+                with app.open_resource("static/images/dt1.png") as fp:
                     message.attach("triangle1.png", "image/png", fp.read())
-                with app.open_resource("static\\images\\dt4.png") as fp:
+                with app.open_resource("static/images/dt4.png") as fp:
                     message.attach("triangle1.png", "image/png", fp.read())
-                with app.open_resource("static\\images\\dt5.png") as fp:
+                with app.open_resource("static/images/dt5.png") as fp:
                     message.attach("triangle1.png", "image/png", fp.read())
-                with app.open_resource("static\\images\\dp1.png") as fp:
+                with app.open_resource("static/images/dp1.png") as fp:
                     message.attach("triangle1.png", "image/png", fp.read())
-                with app.open_resource("static\\images\\dp2.png") as fp:
+                with app.open_resource("static/images/dp2.png") as fp:
                     message.attach("triangle1.png", "image/png", fp.read())                
                     
                 message.body = message_body
