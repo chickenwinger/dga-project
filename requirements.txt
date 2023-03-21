@@ -87,13 +87,13 @@ pycparser==2.21
 pycryptodome==3.17
 Pygments==2.14.0
 pyparsing==3.0.9
+pypiwin32==223
 Pyrebase4==4.6.0
 pyrsistent==0.19.3
 python-dateutil==2.8.2
 python-dotenv==1.0.0
 python-json-logger==2.0.7
 python-jwt==4.0.0
-pywin32==305
 pywinpty==2.0.10
 PyYAML==6.0
 pyzmq==25.0.1

@@ -12,7 +12,7 @@ from flask import (
 from flask_mail import Mail, Message
 from dga import db, auth
 import time
-import os
+from collections import OrderedDict
 from .auth_utils import login_required
 from .dga_utils import dt1, dt4, dt5, pentagon1, pentagon2
 
@@ -48,12 +48,17 @@ def home():
                 flash("There is no record in the database.", "error")
                 return render_template("home.html")
             
-            # extract the record name from the Ordereddict
-            record_name = ordered_dict[0]
-            print(record_name)
-            # extract the record (dictionary) from the Ordereddict
-            record_query = ordered_dict[1]
-            print(record_query)
+            # print(ordered_dict)
+            
+            # # extract the record name from the Ordereddict
+            # record_name = ordered_dict[0]
+            # print(record_name)
+            # # extract the record (dictionary) from the Ordereddict
+            # record_query = ordered_dict[1]
+            # print(record_query)
+            
+            record_name = next(iter(ordered_dict.keys())) # type: ignore
+            record_query = next(iter(ordered_dict.values())) # type: ignore
 
             hydrogen = int(record_query["hydrogen"])
             methane = int(record_query["methane"])
@@ -256,7 +261,6 @@ def get_record(user, key):
             .limit_to_last(1).get()
         )
 
-    print(record.val())
     return record.val()
 
 
