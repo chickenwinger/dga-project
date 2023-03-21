@@ -1,7 +1,11 @@
 import pyrebase
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 firebaseConfig = {
-    'apiKey': "AIzaSyAxk117Aj_aFukk_UBqwL3yp5f81FniZXI",
+    'apiKey': os.getenv('FIREBASE_API_KEY'),
     'authDomain': "management-transformer.firebaseapp.com",
     'databaseURL': "https://management-transformer-default-rtdb.asia-southeast1.firebasedatabase.app",
     'projectId': "management-transformer",
