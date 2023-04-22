@@ -282,4 +282,4 @@ def display_records(user):
 # 1. using query string where the data is passed in the url itself, with ? and & as delimiters
 # and the data is passed as key=value pairs in url_for(), and then using request.args.get() to get the data
 # 2. using name of <input> where the data is passed in the form of <variable> in the url and the function
-# must take in the variable as a parameter
+# must take in the variable as a parameter and then use request.form.get() to get the data
