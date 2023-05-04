@@ -1,5 +1,6 @@
 from flask import (
     Flask,
+    jsonify,
     render_template,
     url_for,
     request,
@@ -20,6 +21,8 @@ from .dga_utils import dt1, dt4, dt5, pentagon1, pentagon2
 graph = Blueprint("graph", __name__)
 mail = Mail()
 
+dga_type = None
+
 
 @graph.route("/overview", methods=["GET", "POST"])
 @login_required
@@ -30,17 +33,46 @@ def overview():
         flash("Session expired, please login again", "error")
         return redirect(url_for("authentication.index"))
 
+    global dga_type
     dga_type = request.args.get("type", None)
 
-    all_records = get_all_records(user, dga_type)
-    tag_nums = []
-    gas_concs = []
-    tag_gas_dict = {}
-    if all_records:
-        tag_nums, gas_concs = all_records
-        tag_gas_dict = dict(zip(tag_nums, gas_concs))
-    else:
-        tag_gas_dict = None
+    breadcrumb_items = [
+        {
+            "url": url_for("graph.overview", type="dt1"),
+            "text": "Duval Triangle 1",
+            "active": True if dga_type == "dt1" else False,
+        },
+        {
+            "url": url_for("graph.overview", type="dt4"),
+            "text": "Duval Triangle 4",
+            "active": True if dga_type == "dt4" else False,
+        },
+        {
+            "url": url_for("graph.overview", type="dt5"),
+            "text": "Duval Triangle 5",
+            "active": True if dga_type == "dt5" else False,
+        },
+        {
+            "url": url_for("graph.overview", type="dp1"),
+            "text": "Duval Pentagon 1",
+            "active": True if dga_type == "dp1" else False,
+        },
+        {
+            "url": url_for("graph.overview", type="dp2"),
+            "text": "Duval Pentagon 2",
+            "active": True if dga_type == "dp2" else False,
+        },
+    ]
+
+    # all_records = get_all_records(user, dga_type)
+    # tag_nums = []
+    # gas_concs = []
+    # tag_gas_dict = {}
+    # if all_records:
+    #     tag_nums, gas_concs = all_records
+    #     tag_gas_dict = dict(zip(tag_nums, gas_concs))
+    # else:
+    #     tag_gas_dict = None
 
     if request.method == "POST":
         records = request.form.to_dict()
@@ -58,17 +90,42 @@ def overview():
             url_for(
                 "graph.overview",
                 type=dga_type,
-                tag_gas_dict=tag_gas_dict,
                 get_fault=get_fault,
+                breadcrumb_items=breadcrumb_items,
             )
         )
 
     return render_template(
         "overview.html",
         type=dga_type,
-        tag_gas_dict=tag_gas_dict,
         get_fault=get_fault,
+        breadcrumb_items=breadcrumb_items,
     )
+
+
+@app.route("/get_table_data")
+def data():
+    user = auth.get_account_info(session["idToken"])["users"][0]
+    print(dga_type)  # type: ignore
+
+    all_records = get_all_records(user, dga_type)
+
+    # Prepare the data in the required format
+    result = []
+    if all_records:
+        for tag_num, gas_conc in all_records.items():  # type: ignore
+            record = {"tag_num": tag_num}
+            gaseous = {"gaseous_content": gas_conc}
+            record.update(gaseous)
+            fault = get_fault(dga_type, tag_num)
+            fault = {"fault": fault}
+            record.update(fault)
+            result.append(record)
+
+    print(result)
+    json_result = jsonify(result)
+    print(json_result)
+    return json_result
 
 
 def generate_tag_number(user, dga_type):
@@ -106,14 +163,7 @@ def get_all_records(user, dga_type):
     if records.val() is None or records.val() == 0:
         return None
 
-    tag_nums = []
-    gas_concs = []
-    for tag_num, gas_conc in records.val().items():  # type: ignore
-        tag_nums.append(tag_num)
-        gas_concs.append(gas_conc)
-
-    print(tag_nums, gas_concs)
-    return tag_nums, gas_concs
+    return records.val()
 
 
 def get_record(user, dga_type, tag_num):
@@ -133,43 +183,62 @@ def get_record(user, dga_type, tag_num):
     return records.val()
 
 
+def extract_gases(record, data_type):
+    gases = {}
+    required_gases = {
+        "dt1": ["ethyleneconc", "methaneconc", "acetyleneconc"],
+        "dt4": ["methaneconc", "hydrogenconc", "ethaneconc"],
+        "dt5": ["ethyleneconc", "methaneconc", "ethaneconc"],
+        "dp1": [
+            "ethyleneconc",
+            "methaneconc",
+            "acetyleneconc",
+            "hydrogenconc",
+            "ethaneconc",
+        ],
+        "dp2": [
+            "ethyleneconc",
+            "methaneconc",
+            "acetyleneconc",
+            "hydrogenconc",
+            "ethaneconc",
+        ],
+    }
+
+    for gas in required_gases[data_type]:
+        gases[gas] = float(record.get(gas, 0))
+
+    return gases
+
+
 def get_fault(data_type, tag_num):
     user = auth.get_account_info(session["idToken"])["users"][0]
     record = dict(get_record(user, data_type, tag_num))  # type: ignore
+    fault = None
+
+    gases = extract_gases(record, data_type)
 
     if data_type == "dt1":
-        ethylene = float(record["ethyleneconc"])
-        methane = float(record["methaneconc"])
-        acetylene = float(record["acetyleneconc"])
-
-        fault = dt1(ethylene, methane, acetylene)
+        fault = dt1(gases["ethyleneconc"], gases["methaneconc"], gases["acetyleneconc"])
     elif data_type == "dt4":
-        methane = float(record["methaneconc"])
-        hydrogen = float(record["hydrogenconc"])
-        ethane = float(record["ethaneconc"])
-
-        fault = dt4(methane, hydrogen, ethane)
+        fault = dt4(gases["methaneconc"], gases["hydrogenconc"], gases["ethaneconc"])
     elif data_type == "dt5":
-        ethylene = float(record["ethyleneconc"])
-        ethane = float(record["ethaneconc"])
-        methane = float(record["methaneconc"])
-
-        fault = dt5(ethylene, methane, ethane)
+        fault = dt5(gases["ethyleneconc"], gases["methaneconc"], gases["ethaneconc"])
     elif data_type == "dp1":
-        ethylene = float(record["ethyleneconc"])
-        methane = float(record["methaneconc"])
-        acetylene = float(record["acetyleneconc"])
-        hydrogen = float(record["hydrogenconc"])
-        ethane = float(record["ethaneconc"])
-
-        fault = pentagon1(ethane, hydrogen, acetylene, ethylene, methane)
+        fault = pentagon1(
+            gases["ethaneconc"],
+            gases["hydrogenconc"],
+            gases["acetyleneconc"],
+            gases["ethyleneconc"],
+            gases["methaneconc"],
+        )
     else:
-        ethylene = float(record["ethyleneconc"])
-        methane = float(record["methaneconc"])
-        acetylene = float(record["acetyleneconc"])
-        hydrogen = float(record["hydrogenconc"])
-        ethane = float(record["ethaneconc"])
-
-        fault = pentagon2(ethane, hydrogen, acetylene, ethylene, methane)
+        fault = pentagon2(
+            gases["ethaneconc"],
+            gases["hydrogenconc"],
+            gases["acetyleneconc"],
+            gases["ethyleneconc"],
+            gases["methaneconc"],
+        )
 
     return fault
