@@ -64,6 +64,16 @@ def overview():
         },
     ]
 
+    # all_records = get_all_records(user, dga_type)
+    # tag_nums = []
+    # gas_concs = []
+    # tag_gas_dict = {}
+    # if all_records:
+    #     tag_nums, gas_concs = all_records
+    #     tag_gas_dict = dict(zip(tag_nums, gas_concs))
+    # else:
+    #     tag_gas_dict = None
+
     if request.method == "POST":
         records = request.form.to_dict()
 
@@ -116,12 +126,6 @@ def data():
     json_result = jsonify(result)
     print(json_result)
     return json_result
-
-
-@graph.route("/records", methods=["GET", "POST"])
-@login_required
-def records():
-    return render_template("records.html")
 
 
 def generate_tag_number(user, dga_type):
