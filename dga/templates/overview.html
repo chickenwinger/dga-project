@@ -130,15 +130,45 @@
         </div>
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
-            {% for item in breadcrumb_items %}
-            <li class="breadcrumb-item{% if item.active %} active {% endif %}">
-              <a href="{{ item.url }}">{{ item.text }}</a>
+            <li
+              class="breadcrumb-item {% if type == 'dt1' %} active {% endif %}"
+            >
+              <a href="{{ url_for('graph.overview', type='dt1') }}"
+                >Duval Triangle 1</a
+              >
             </li>
-            {% endfor %}
+            <li
+              class="breadcrumb-item {% if type == 'dt4' %} active {% endif %}"
+            >
+              <a href="{{ url_for('graph.overview', type='dt4') }}"
+                >Duval Triangle 4</a
+              >
+            </li>
+            <li
+              class="breadcrumb-item {% if type == 'dt5' %} active {% endif %}"
+            >
+              <a href="{{ url_for('graph.overview', type='dt5') }}"
+                >Duval Triangle 5</a
+              >
+            </li>
+            <li
+              class="breadcrumb-item {% if type == 'dp1' %} active {% endif %}"
+            >
+              <a href="{{ url_for('graph.overview', type='dp1') }}"
+                >Duval Pentagon 1</a
+              >
+            </li>
+            <li
+              class="breadcrumb-item {% if type == 'dp2' %} active {% endif %}"
+            >
+              <a href="{{ url_for('graph.overview', type='dp2') }}"
+                >Duval Pentagon 2</a
+              >
+            </li>
           </ol>
         </nav>
-        <div style="overflow: auto; height: 30rem">
-          <table class="table" id="data-table">
+        <div style="overflow: auto; height: 300px">
+          <table class="table">
             <thead class="sticky-top table-secondary">
               <tr>
                 <th scope="col">#</th>
@@ -146,7 +176,70 @@
                 <th scope="col">Type of faults</th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+              {% if tag_gas_dict is none %}
+              <tr>
+                <th scope="row">No data</th>
+                <td></td>
+                <td></td>
+              </tr>
+              {% else %} {% for tag_num, gas_conc in tag_gas_dict.items() %} {%
+              if type == 'dt1' %}
+              <tr>
+                <th scope="row">{{ tag_num }}</th>
+                <td>
+                  Ethylene: {{ gas_conc['ethyleneconc'] }}<br />
+                  Methane: {{ gas_conc['methaneconc'] }}<br />
+                  Acetylene: {{ gas_conc['acetyleneconc'] }}
+                </td>
+                <td>{{ get_fault('dt1', tag_num) }}</td>
+              </tr>
+              {% elif type == 'dt4' %}
+              <tr>
+                <th scope="row">{{ tag_num }}</th>
+                <td>
+                  Hydrogen: {{ gas_conc['hydrogenconc'] }}<br />
+                  Ethane: {{ gas_conc['ethaneconc'] }}<br />
+                  Methane: {{ gas_conc['methaneconc'] }}
+                </td>
+                <td>{{ get_fault('dt4', tag_num) }}</td>
+              </tr>
+              {% elif type == 'dt5' %}
+              <tr>
+                <th scope="row">{{ tag_num }}</th>
+                <td>
+                  Ethylene: {{ gas_conc['ethyleneconc'] }}<br />
+                  Ethane: {{ gas_conc['ethaneconc'] }}<br />
+                  Methane: {{ gas_conc['methaneconc'] }}
+                </td>
+                <td>{{ get_fault('dt5', tag_num) }}</td>
+              </tr>
+              {% elif type == 'dp1' %}
+              <tr>
+                <th scope="row">{{ tag_num }}</th>
+                <td>
+                  Ethylene: {{ gas_conc['ethyleneconc'] }}<br />
+                  Methane: {{ gas_conc['methaneconc'] }}<br />
+                  Acetylene: {{ gas_conc['acetyleneconc'] }}<br />
+                  Hydrogen: {{ gas_conc['hydrogenconc'] }}<br />
+                  Ethane: {{ gas_conc['ethaneconc'] }}
+                </td>
+                <td>{{ get_fault('dp1', tag_num) }}</td>
+              </tr>
+              {% elif type == 'dp2' %}
+              <tr>
+                <th scope="row">{{ tag_num }}</th>
+                <td>
+                  Ethylene: {{ gas_conc['ethyleneconc'] }}<br />
+                  Methane: {{ gas_conc['methaneconc'] }}<br />
+                  Acetylene: {{ gas_conc['acetyleneconc'] }}<br />
+                  Hydrogen: {{ gas_conc['hydrogenconc'] }}<br />
+                  Ethane: {{ gas_conc['ethaneconc'] }}
+                </td>
+                <td>{{ get_fault('dp2', tag_num) }}</td>
+              </tr>
+              {% endif %} {% endfor %} {% endif %}
+            </tbody>
           </table>
         </div>
       </div>
@@ -168,6 +261,22 @@
       integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
       crossorigin="anonymous"
     ></script>
-    <script src="{{url_for('static', filename='index.js')}}"></script>
+    <script>
+      const recordModal = document.getElementById("recordModal");
+      recordModal.addEventListener("show.bs.modal", (event) => {
+        // Button that triggered the modal
+        const button = event.relatedTarget;
+        // Extract info from data-bs-* attributes
+        const type = button.getAttribute("data-bs-type");
+        // If necessary, you could initiate an Ajax request here
+        // and then do the updating in a callback.
+        //
+        // Update the modal's content.
+        const modalTitle = recordModal.querySelector(".modal-title");
+        const modalBodyInput = recordModal.querySelector(".modal-body input");
+
+        modalTitle.textContent = `Add new record of ${type.toUpperCase()}`;
+      });
+    </script>
   </body>
 </html>
