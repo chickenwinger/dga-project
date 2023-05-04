@@ -57,6 +57,9 @@ function updateTable(data) {
   const tableBody = document.querySelector("#data-table tbody");
   tableBody.innerHTML = "";
 
+  // Fetch the URL from the hidden element's data attribute
+  const recordsUrl = document.querySelector("#url-container").dataset.url;
+  
   if (data.length === 0) {
     const noDataRow = `
     <tr>
@@ -71,8 +74,8 @@ function updateTable(data) {
       const faultValue = row.fault;
 
       const tableRow = `
-        <tr>
-          <th scope="row">${tagNum}</th>
+        <tr class="position-relative">
+          <th scope="row"><a href="${recordsUrl}" class="stretched-link">${tagNum}</a></th>
           <td>${gaseousContent}</td>
           <td>${faultValue}</td>
         </tr>
