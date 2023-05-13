@@ -1,0 +1,106 @@
+<div
+  class="modal fade"
+  id="recordModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Add new record</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form autocomplete="off" method="POST">
+          {% if type == 'dt1' or type == 'dt5' or type == 'dp1' or type == 'dp2' %}
+          <div class="mb-3">
+            <label for="ethyleneconc" class="col-form-label">Ethylene</label>
+            <input
+              type="text"
+              class="form-control"
+              id="ethyleneconc"
+              name="ethyleneconc"
+              value="{{ request.form['ethyleneconc'] }}"
+              required
+              pattern="^(99|[1-9][0-9]?)(\.\d{1,2})?$"
+              placeholder="Insert value 1-100"
+            />
+          </div>
+          {% endif %}
+          {% if type == 'dt1' or type == 'dt4' or type == 'dt5' or type == 'dp1' or type == 'dp2' %}
+          <div class="mb-3">
+            <label for="methaneconc" class="col-form-label">Methane</label>
+            <input
+              type="text"
+              class="form-control"
+              id="methaneconc"
+              name="methaneconc"
+              value="{{ request.form['methaneconc'] }}"
+              required
+              pattern="^(99|[1-9][0-9]?)(\.\d{1,2})?$"
+              placeholder="Insert value 1-100"
+            />
+          </div>
+          {% endif %}
+          {% if type == 'dt1' or type == 'dp1' or type == 'dp2' %}
+          <div class="mb-3">
+            <label for="acetyleneconc" class="col-form-label">Acetylene</label>
+            <input
+              type="text"
+              class="form-control"
+              id="acetyleneconc"
+              name="acetyleneconc"
+              value="{{ request.form['acetyleneconc'] }}"
+              required
+              pattern="^(99|[1-9][0-9]?)(\.\d{1,2})?$"
+              placeholder="Insert value 1-100"
+            />
+          </div>
+          {% endif %}
+          {% if type == 'dt4' or type == 'dp1' or type == 'dp2' %}
+          <div class="mb-3">
+            <label for="hydrogenconc" class="col-form-label">Hydrogen</label>
+            <input
+              type="text"
+              class="form-control"
+              id="hydrogenconc"
+              name="hydrogenconc"
+              value="{{ request.form['hydrogenconc'] }}"
+              required
+              pattern="^(99|[1-9][0-9]?)(\.\d{1,2})?$"
+              placeholder="Insert value 1-100"
+            />
+          </div>
+          {% endif %}
+          {% if type == 'dt4' or type == 'dt5' or type == 'dp1' or type == 'dp2' %}
+          <div class="mb-3">
+            <label for="ethaneconc" class="col-form-label">Ethane</label>
+            <input
+              type="text"
+              class="form-control"
+              id="ethaneconc"
+              name="ethaneconc"
+              value="{{ request.form['ethaneconc'] }}"
+              required
+              pattern="^(99|[1-9][0-9]?)(\.\d{1,2})?$"
+              placeholder="Insert value 1-100"
+            />
+          </div>
+          {% endif %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button class="btn btn-primary">Add</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
