@@ -30,6 +30,8 @@ def home():
         flash("Session expired, please login again", "error")
         return redirect(url_for("authentication.index"))
 
+    image_paths = ["dt1.png", "dt4.png", "dt5.png", "dp1.png", "dp2.png"]
+
     if request.method == "POST":
         if request.form["action"] == "record":
             if add_record(user):
@@ -104,7 +106,7 @@ def home():
                 selected_val=selected_val,
             )
 
-    return render_template("home.html")
+    return render_template("home.html", image_paths=image_paths)
 
 
 

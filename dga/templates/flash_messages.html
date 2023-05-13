@@ -1,11 +1,7 @@
-{% with errors = get_flashed_messages(category_filter=['error']) %}
-{% if errors %}
+{% with errors = get_flashed_messages(category_filter=['error']) %} {% if errors
+%}
 <p class="error">Error: {{ errors }}</p>
-{% endif %}
-{% endwith %}
-
-{% with message = get_flashed_messages(category_filter=['msg']) %}
-{% if message %}
+{% endif %} {% endwith %} {% with message =
+get_flashed_messages(category_filter=['msg']) %} {% if message %}
 <p class="msg">{{ message }}</p>
-{% endif %}
-{% endwith %}
+{% endif %} {% endwith %}
