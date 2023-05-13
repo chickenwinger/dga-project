@@ -116,11 +116,63 @@
       </div>
     </header>
 
-    <main class="d-flex p-2 flex-column" role="main"></main>
+    <main class="d-flex p-2 flex-column" role="main">
+      <div class="flex-nowrap justify-content-between align-items-center">
+        <div class="col-md-1 mb-3">
+          <select
+            class="form-select"
+            id="year"
+            aria-label="Default select example"
+          >
+            <option>Year</option>
+            <option value="1" selected>2023</option>
+          </select>
+        </div>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            {% for item in breadcrumb_items %}
+            <li class="breadcrumb-item{% if item.active %} active {% endif %}">
+              <a href="{{ item.url }}">{{ item.text }}</a>
+            </li>
+            {% endfor %}
+          </ol>
+        </nav>
+        <div style="overflow: auto; height: 30rem">
+          <table class="table table-hover" id="data-table">
+            <thead class="sticky-top table-secondary">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Gaseous content</th>
+                <th scope="col">Type of faults</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row row-cols-lg-auto">
+        <button
+          class="button"
+          type="button"
+          data-bs-toggle="modal"
+          data-bs-target="#recordModal"
+          data-bs-type="{{ type }}"
+        >
+          New record
+        </button>
+        {% include 'popup.html' %} {% include 'flash_messages.html' %}
+      </div>
+    </main>
+    <div
+      id="url-container"
+      data-url="{{ url_for('graph.records') }}"
+      style="display: none"
+    ></div>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N"
       crossorigin="anonymous"
     ></script>
+    <script src="{{url_for('static', filename='index.js')}}"></script>
   </body>
 </html>

@@ -19,9 +19,11 @@ def create_app():
     with app.app_context():
         from .authentication import authentication
         from .rtdatabase import rtdatabase
+        from .graph import graph
 
         app.register_blueprint(authentication, url_prefix='/')
         app.register_blueprint(rtdatabase, url_prefix='/')
+        app.register_blueprint(graph, url_prefix='/')
         
         mail = Mail()
         mail.init_app(app)
