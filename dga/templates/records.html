@@ -1,92 +1,106 @@
-{% extends "base.html" %}
-{% block content %}
-<div class="container bg-accent-400" style="min-height: 100vh">
-  <div class="even-columns">
-    <div class="input-wrap dga">
-      <div class="fs-secondary-heading fw-semi-bold">
-        <p>Records</p>
-      </div>
-      <div class="list-group">
-        {% for key, timestamp in kt.items() %}
-        {% if key == "No records found" %} <em>No records found</em>
-        {% else %}
-        <a
-          href="{{ url_for('rtdatabase.records', record_name=key) }}"
-          class="list-group-item"
-          name="{{ key }}"
-          {% if key == record_selected %} style="border: 1px solid var(--clr-primary-400);" {% endif %}
-          aria-current="true"
-        >
-          <div>
-            <h5 class="fw-semi-bold fs-400">{{ key }}</h5>
+{% extends "base.html" %} {% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <!-- Records table -->
+
+    <div class="col-3">
+      <div class="h-100">
+        <div class="d-flex flex-column h-100 position-relative">
+          <div class="hide-scrollbar">
+            <div class="container py-3">
+              <div class="mb-3"><h3 class="fw-semibold m-0">Records</h3></div>
+
+              <!-- Card list -->
+
+              <form action="" method="POST">
+                <div class="card-list px-2">
+                  {% for key, timestamp in kt.items() %} {% if key == "No
+                  records found" %} <em>No records found</em>
+                  {% else %}
+                  <a
+                    href="{{ url_for('rtdatabase.records', record_name=key) }}"
+                    class="card mb-2 link-underline link-underline-opacity-0"
+                    {% if key == record_selected %} style="border: 1px solid rgb(102, 102, 102);" {% endif %}
+                    name="{{ key }}"
+                    aria-current="true"
+                  >
+                    <div class="card-body">
+                      <div>
+                        <h5 class="fw-semibold">{{ key }}</h5>
+                      </div>
+                      <small class="text-body-tertiary">
+                        {{ timestamp }}
+                      </small>
+                    </div>
+                  </a>
+                  {% endif %} {% endfor %}
+                </div>
+              </form>
+            </div>
           </div>
-          <small class="fs-300" style="color: grey">
-            {{ timestamp }}
-          </small>
-        </a>
-        {% endif %}
-        {% endfor %}
+        </div>
       </div>
-      {% include 'flash_messages.html' %}
-      <form class="form-button" method="POST">
-        <button 
-          class="button delete" 
-          type="submit" 
-          name="action" 
-          value="delete"
+    </div>
+
+    <!-- Graphs -->
+
+    <div class="col-9">
+      <form
+        class="d-flex justify-content-evenly align-items-center m-4"
+        action=""
+        id="image-form"
+      >
+        <span class="text-nowrap fw-semibold">Select two tools:</span>
+
+        {% for image in image_paths %}
+
+        <!-- DGA selection -->
+
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value="{{ image }}"
+            name="image"
+            id="flexCheckDefault"
+          />
+          <label class="form-check-label" for="flexCheckDefault">
+            {{ image }}
+          </label>
+        </div>
+
+        {% endfor %}
+
+        <button
+          type="submit"
+          class="record-button"
+          id="show-button"
+          name="action"
+          value="show"
         >
-          Delete
-        </button>
-        <button 
-          class="button mail" 
-          title="Send results to your email" 
-          type="submit" 
-          name="action" 
-          value="email">
-          <img src="static/images/email.png" alt="Send mail">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="25"
+            height="25"
+            fill="currentColor"
+            class="bi bi-arrow-right-circle"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"
+            />
+          </svg>
         </button>
       </form>
+
+      <!-- Image display -->
+
+      <div
+        class="d-flex flex-shrink-1 justify-content-evenly"
+        id="selected-images"
+      ></div>
     </div>
-    <form class="image-wrap" method="POST">
-      <div>
-        <h2
-          class="text-primary-900 fw-semi-bold fs-600"
-          style="margin-bottom: 10px"
-        >
-          Record
-        </h2>
-      </div>
-      <div class="select">
-        <select
-          id="selection"
-          name="action"
-          method="POST"
-          onchange="this.form.submit()"
-          action="/home"
-        >
-          <option value="">Choose a tool</option>
-          <option name="action" value="triangle1" {% if selected_val == "triangle1" %} selected {% endif %}>
-            Duval Triangle 1
-          </option>
-          <option name="action" value="triangle4" {% if selected_val == "triangle4" %} selected {% endif %}>
-            Duval Triangle 4
-          </option>
-          <option name="action" value="triangle5" {% if selected_val == "triangle5" %} selected {% endif %}>
-            Duval Triangle 5
-          </option>
-          <option name="action" value="pentagon1" {% if selected_val == "pentagon1" %} selected {% endif %}>
-            Duval Pentagon 1
-          </option>
-          <option name="action" value="pentagon2" {% if selected_val == "pentagon2" %} selected {% endif %}>
-            Duval Pentagon 2
-          </option>
-        </select>
-      </div>
-      <div class="image-frame">{% include 'imagedisplay.html' %}</div>
-      <div class="fs-400 fw-semi-bold" style="color: firebrick">
-        Type of fault: {{ fault }}
-      </div>
-    </form>
   </div>
 </div>
 {% endblock %}

@@ -137,6 +137,11 @@
     </div>
   </form>
 
+  <!-- flash messages -->
+  <div class="ms-2 mb-0" style="height: 24px">
+    {% include 'flash_messages.html' %}
+  </div>
+
   <form
     class="d-flex justify-content-evenly align-items-center m-4"
     action=""
@@ -193,8 +198,4 @@
     id="selected-images"
   ></div>
 </div>
-
-<script>
-  var staticUrlPrefix = "{{ url_for('static', filename='') }}";
-</script>
 {% endblock %}

@@ -30,81 +30,15 @@ def home():
         flash("Session expired, please login again", "error")
         return redirect(url_for("authentication.index"))
 
-    image_paths = ["dt1.png", "dt4.png", "dt5.png", "dp1.png", "dp2.png"]
+    image_paths = ["dt1", "dt4", "dt5", "dp1", "dp2"]
 
     if request.method == "POST":
         if request.form["action"] == "record":
-            if add_record(user):
-                flash("Record name already exists", "error")
-                return render_template("home.html")
-            else:
-                flash("Record added successfully", "msg")
-                return redirect(url_for("rtdatabase.home"))
-
-            # print(get_last_record())
-        else:
-            ordered_dict = get_record(user, None)
+            add_record(user)
             
-            # check if there is any record in the db
-            if ordered_dict is None:
-                flash("There is no record in the database.", "error")
-                return render_template("home.html")
-            
-            # print(ordered_dict)
-            
-            # # extract the record name from the Ordereddict
-            # record_name = ordered_dict[0]
-            # print(record_name)
-            # # extract the record (dictionary) from the Ordereddict
-            # record_query = ordered_dict[1]
-            # print(record_query)
-            
-            record_name = next(iter(ordered_dict.keys())) # type: ignore
-            record_query = next(iter(ordered_dict.values())) # type: ignore
-
-            hydrogen = int(record_query["hydrogen"])
-            methane = int(record_query["methane"])
-            acetylene = int(record_query["acetylene"])
-            ethylene = int(record_query["ethylene"])
-            ethane = int(record_query["ethane"])
-            cmonoxide = int(record_query["cmonoxide"])
-            cdioxide = int(record_query["cdioxide"])
-
-            img = None
-            fault_type = None
-            selected_val = None
-            if request.form["action"] == "triangle1":
-                img = 1
-                fault_type = dt1(ethylene, methane, acetylene)
-                selected_val = "triangle1"
-            elif request.form["action"] == "triangle4":
-                img = 2
-                fault_type = dt4(methane, hydrogen, ethane)
-                selected_val = "triangle4"
-            elif request.form["action"] == "triangle5":
-                img = 3
-                fault_type = dt5(ethylene, methane, ethane)
-                selected_val = "triangle5"
-            elif request.form["action"] == "pentagon1":
-                img = 4
-                fault_type = pentagon1(
-                    ethane, hydrogen, acetylene, ethylene, methane
-                )
-                selected_val = "pentagon1"
-            elif request.form["action"] == "pentagon2":
-                img = 5
-                fault_type = pentagon2(
-                    ethane, hydrogen, acetylene, ethylene, methane
-                )
-                selected_val = "pentagon2"
-
-            return render_template(
-                "home.html",
-                img=img,
-                fault=fault_type,
-                record_name=record_name,
-                selected_val=selected_val,
-            )
+            # add record to the database
+            flash("Record added successfully", "msg")
+            return redirect(url_for("rtdatabase.home"))
 
     return render_template("home.html", image_paths=image_paths)
 
@@ -119,149 +53,167 @@ def records():
         flash("Session expired, please login again", "error")
         return redirect(url_for("authentication.index"))
 
+    image_paths = ["dt1", "dt4", "dt5", "dp1", "dp2"]
+
     keys_and_timestamps = display_records(user)
     # print(keys_and_timestamps)
     record_selected = request.args.get("record_name", None)
-    print(f"Record selected: {record_selected}")
 
-    if request.method == "POST":
-        if record_selected is None:
-            flash("Please select a record", "error")
-            return render_template("records.html", kt=keys_and_timestamps)
+    if record_selected:
+        
+        data = (
+            db.child("records")
+            .child(user["localId"])
+            .child(record_selected)
+            .child("gaseous_data")
+            .get().val()
+        )
 
-        if request.form["action"] == "delete":
-            # print("Delete button pressed")
-            db.child("records").child(user["localId"]).child(record_selected).remove()
+        acetylene = int(data["acetylene"])
+        ethane = int(data["ethane"])
+        ethylene = int(data["ethylene"])
+        hydrogen = int(data["hydrogen"])
+        methane = int(data["methane"])
+        
+        dt1(ethylene, methane, acetylene)
+        dt4(methane, hydrogen, ethane)
+        dt5(ethylene, methane, ethane)
+        pentagon1(ethylene, methane, ethane, hydrogen, acetylene)
+        pentagon2(ethylene, methane, ethane, hydrogen, acetylene)
+    
+    # if request.method == "POST":
+    #     if record_selected is None:
+    #         flash("Please select a record", "error")
+    #         return render_template("records.html", kt=keys_and_timestamps)
 
-            flash(f"{record_selected} deleted successfully", "msg")
-            return redirect(url_for("rtdatabase.records"))
+    #     if request.form["action"] == "delete":
+    #         # print("Delete button pressed")
+    #         db.child("records").child(user["localId"]).child(record_selected).remove()
 
-        else: 
-            query_dict = dict(get_record(user, record_selected))
+    #         flash(f"{record_selected} deleted successfully", "msg")
+    #         return redirect(url_for("rtdatabase.records"))
+
+    #     else: 
+    #         query_dict = dict(get_record(user, record_selected))
             
-            if request.form["action"] == "email":
-                email = auth.get_account_info(session["idToken"])["users"][0]["email"]
-                message = Message("Hello", recipients=[email])
-                message_body = f"Hello, this is the results of your analysis from the record named \"{record_selected}\":\n"
+    #         if request.form["action"] == "email":
+    #             email = auth.get_account_info(session["idToken"])["users"][0]["email"]
+    #             message = Message("Hello", recipients=[email])
+    #             message_body = f"Hello, this is the results of your analysis from the record named \"{record_selected}\":\n"
 
-                for key, value in query_dict.items():
-                    message_body += f"{key}: {value}\n"
+    #             for key, value in query_dict.items():
+    #                 message_body += f"{key}: {value}\n"
                     
-                with app.open_resource("static/images/dt1.png") as fp:
-                    message.attach("triangle1.png", "image/png", fp.read())
-                with app.open_resource("static/images/dt4.png") as fp:
-                    message.attach("triangle1.png", "image/png", fp.read())
-                with app.open_resource("static/images/dt5.png") as fp:
-                    message.attach("triangle1.png", "image/png", fp.read())
-                with app.open_resource("static/images/dp1.png") as fp:
-                    message.attach("triangle1.png", "image/png", fp.read())
-                with app.open_resource("static/images/dp2.png") as fp:
-                    message.attach("triangle1.png", "image/png", fp.read())                
+    #             with app.open_resource("static/images/dt1.png") as fp:
+    #                 message.attach("triangle1.png", "image/png", fp.read())
+    #             with app.open_resource("static/images/dt4.png") as fp:
+    #                 message.attach("triangle1.png", "image/png", fp.read())
+    #             with app.open_resource("static/images/dt5.png") as fp:
+    #                 message.attach("triangle1.png", "image/png", fp.read())
+    #             with app.open_resource("static/images/dp1.png") as fp:
+    #                 message.attach("triangle1.png", "image/png", fp.read())
+    #             with app.open_resource("static/images/dp2.png") as fp:
+    #                 message.attach("triangle1.png", "image/png", fp.read())                
                     
-                message.body = message_body
+    #             message.body = message_body
                 
-                mail.send(message)
-                flash("Records sent to email", "msg")
+    #             mail.send(message)
+    #             flash("Records sent to email", "msg")
 
-            else:
-                print(query_dict)
+    #         else:
+    #             print(query_dict)
 
-                hydrogen = int(query_dict["hydrogen"])
-                methane = int(query_dict["methane"])
-                acetylene = int(query_dict["acetylene"])
-                ethylene = int(query_dict["ethylene"])
-                ethane = int(query_dict["ethane"])
-                cmonoxide = int(query_dict["cmonoxide"])
-                cdioxide = int(query_dict["cdioxide"])
+    #             hydrogen = int(query_dict["hydrogen"])
+    #             methane = int(query_dict["methane"])
+    #             acetylene = int(query_dict["acetylene"])
+    #             ethylene = int(query_dict["ethylene"])
+    #             ethane = int(query_dict["ethane"])
+    #             cmonoxide = int(query_dict["cmonoxide"])
+    #             cdioxide = int(query_dict["cdioxide"])
 
-                img = None
-                fault_type = None
-                selected_val = None
-                if request.form["action"] == "triangle1":
-                    img = 1
-                    fault_type = dt1(ethylene, methane, acetylene)
-                    selected_val = "triangle1"
-                elif request.form["action"] == "triangle4":
-                    img = 2
-                    fault_type = dt4(methane, hydrogen, ethane)
-                    selected_val = "triangle4"
-                elif request.form["action"] == "triangle5":
-                    img = 3
-                    fault_type = dt5(ethylene, methane, ethane)
-                    selected_val = "triangle5"
-                elif request.form["action"] == "pentagon1":
-                    img = 4
-                    fault_type = pentagon1(ethane, hydrogen, acetylene, ethylene, methane)
-                    selected_val = "pentagon1"
-                elif request.form["action"] == "pentagon2":
-                    img = 5
-                    fault_type = pentagon2(ethane, hydrogen, acetylene, ethylene, methane)
-                    selected_val = "pentagon2"
+    #             img = None
+    #             fault_type = None
+    #             selected_val = None
+    #             if request.form["action"] == "triangle1":
+    #                 img = 1
+    #                 fault_type = dt1(ethylene, methane, acetylene)
+    #                 selected_val = "triangle1"
+    #             elif request.form["action"] == "triangle4":
+    #                 img = 2
+    #                 fault_type = dt4(methane, hydrogen, ethane)
+    #                 selected_val = "triangle4"
+    #             elif request.form["action"] == "triangle5":
+    #                 img = 3
+    #                 fault_type = dt5(ethylene, methane, ethane)
+    #                 selected_val = "triangle5"
+    #             elif request.form["action"] == "pentagon1":
+    #                 img = 4
+    #                 fault_type = pentagon1(ethane, hydrogen, acetylene, ethylene, methane)
+    #                 selected_val = "pentagon1"
+    #             elif request.form["action"] == "pentagon2":
+    #                 img = 5
+    #                 fault_type = pentagon2(ethane, hydrogen, acetylene, ethylene, methane)
+    #                 selected_val = "pentagon2"
 
-                return render_template(
-                    "records.html",
-                    img=img,
-                    fault=fault_type,
-                    selected_val=selected_val,
-                    kt=keys_and_timestamps,
-                    record_selected=record_selected,
-                )
+    #             return render_template(
+    #                 "records.html",
+    #                 img=img,
+    #                 fault=fault_type,
+    #                 selected_val=selected_val,
+    #                 kt=keys_and_timestamps,
+    #                 record_selected=record_selected,
+    #             )
 
     return render_template(
-        "records.html", kt=keys_and_timestamps, record_selected=record_selected
+        "records.html", kt=keys_and_timestamps, record_selected=record_selected, image_paths=image_paths
     )
-
+    
 
 def add_record(user):
-    record = request.form.get("rname")
-    hydrogen = request.form.get("hydrogenconc")
-    methane = request.form.get("methaneconc")
-    acetylene = request.form.get("acetyleneconc")
-    ethylene = request.form.get("ethyleneconc")
-    ethane = request.form.get("ethaneconc")
-    cmonoxide = request.form.get("cmonoxideconc")
-    cdioxide = request.form.get("cdioxideconc")
-    total = request.form.get("totalcombustibles")
+    new_tag_no = generate_tag_number(user)
+    records = request.form.to_dict()
+    ethane = int(records["ethane"])
+    hydrogen = int(records["hydrogen"])
+    methane = int(records["methane"])
+    acetylene = int(records["acetylene"])
+    ethylene = int(records["ethylene"])
+    
+    dp1 = pentagon1(ethane, hydrogen, acetylene, ethylene, methane)
+    dp2 = pentagon2(ethane, hydrogen, acetylene, ethylene, methane)
 
     data = {
         "timestamp": time.time(),  # firebase.database.ServerValue.TIMESTAMP,
-        "hydrogen": hydrogen,
-        "methane": methane,
-        "acetylene": acetylene,
-        "ethylene": ethylene,
-        "ethane": ethane,
-        "cmonoxide": cmonoxide,
-        "cdioxide": cdioxide,
-        "total_combustibles": total,
+        "gaseous_data": records,
+        "fault_type": {
+            "dt1": dt1(ethylene, methane, acetylene),
+            "dt4": dt4(methane, hydrogen, ethane),
+            "dt5": dt5(ethylene, methane, ethane)
+        }
     }
 
     # doing ref like this does not work somehow, will instead refresh the path everytime it is called
     # ref = db.child('records').child(user['localId'])
+    
+    ref_path = db.child("records").child(user["localId"]).get()
 
     # if user (localId) doesn't exist
-    if db.child("records").child(user["localId"]).get().val() is None:
-        db.child("records").child(user["localId"]).set({record: data})
-    # if record name already exists
-    elif db.child("records").child(user["localId"]).child(record).get().val():
-        return True
-    # if record name doesn't exist
+    if ref_path.val() is None:
+        db.child("records").child(user["localId"]).set({new_tag_no: data})
+    # for new record
     else:
         print("Successfully added record")
-        db.child("records").child(user["localId"]).child(record).set(data)
+        db.child("records").child(user["localId"]).child(new_tag_no).set(data)
 
 
-def get_record(user, key):
+def get_record(user, tag_num):
     # if record name is numerical value only, it will return None as key. For more info, see: https://github.com/thisbejim/Pyrebase/issues/131
     record = None
-    if key:
-        record = db.child("records").child(user["localId"]).child(key).get()
-    else:
-        record = (
-            db.child("records")
-            .child(user["localId"])
-            .order_by_child("timestamp")
-            .limit_to_last(1).get()
-        )
+    record = (
+        db.child("records")
+        .child(user["localId"])
+        .child(tag_num)
+        .get()
+    )
 
     return record.val()
 
@@ -278,6 +230,57 @@ def display_records(user):
 
     return keys_and_timestamps
 
+def generate_tag_number(user):
+
+    # get the last tag_no
+    max_tag_no = (
+        db.child("records")
+        .child(user["localId"])
+        .order_by_key()
+        .limit_to_last(1)
+        .get()
+    )
+
+    if max_tag_no.val() is None:  # if no records exist
+        print("No records exist")
+        new_tag_no = "DGA" + "0001"
+    else:
+        print("Records exist")
+        current_max_tag_no = list(max_tag_no.val().keys())[0]  # type: ignore
+        print(current_max_tag_no)
+        new_tag_no = "DGA" + str(int(current_max_tag_no[3:]) + 1).zfill(4)
+
+    print(new_tag_no)
+    return new_tag_no
+
+def extract_gases(record, data_type):
+    gases = {}
+    required_gases = {
+        "dt1": ["ethyleneconc", "methaneconc", "acetyleneconc"],
+        "dt4": ["methaneconc", "hydrogenconc", "ethaneconc"],
+        "dt5": ["ethyleneconc", "methaneconc", "ethaneconc"],
+    }
+
+    for gas in required_gases[data_type]:
+        gases[gas] = float(record.get(gas, 0))
+
+    return gases
+
+def get_fault(data_type, tag_num):
+    user = auth.get_account_info(session["idToken"])["users"][0]
+    record = dict(get_record(user, data_type, tag_num))  # type: ignore
+    fault = None
+
+    gases = extract_gases(record, data_type)
+
+    if data_type == "dt1":
+        fault = dt1(gases["ethyleneconc"], gases["methaneconc"], gases["acetyleneconc"])
+    elif data_type == "dt4":
+        fault = dt4(gases["methaneconc"], gases["hydrogenconc"], gases["ethaneconc"])
+    elif data_type == "dt5":
+        fault = dt5(gases["ethyleneconc"], gases["methaneconc"], gases["ethaneconc"])
+
+    return fault
 
 # Note to self:
 # There are 2 ways to pass data in url:
