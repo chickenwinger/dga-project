@@ -35,7 +35,7 @@ def init_dashboard(server):
             ),
             dbc.Row(
                 [
-                    dbc.Label("Pick a tool", className="text-secondary fs-5 my-2"),
+                    dbc.Label("Pick a tool", className="text-secondary fs-5 my-1"),
                     dcc.Dropdown(
                         id="fault-type-dropdown",
                         options=[
@@ -47,7 +47,6 @@ def init_dashboard(server):
                         clearable=False,
                         style={
                             "width": "50%",
-                            "margin-bottom": "0.5rem",
                         },
                     ),
                 ]
