@@ -130,3 +130,8 @@ dmypy.json
 tokenId_example.txt
 
 dga/templates/test.html
+dga/static/images/dp1.png
+dga/static/images/dp2.png
+dga/static/images/dt1.png
+dga/static/images/dt4.png
+dga/static/images/dt5.png

@@ -1,7 +1,7 @@
-from dga.firebaseConfig import firebase
+from dga.plotlydash.data import create_dataframe
+import pandas as pd
 
-db = firebase.database()
+df = create_dataframe()
 
-ref = db.child('records').child('5lfaC7Q1nwXDjG4Y95eqIFs2gcb2')
-
-print(ref.child('record 1').set({'timestamp': 1234567890, 'hydrogen': 1, 'methane': 2, 'acetylene': 3, 'ethylene': 4, 'ethane': 5, 'cmonoxide': 6, 'cdioxide': 7, 'total_combustibles': 8}))
+if isinstance(df, pd.DataFrame):
+    print(f"df is a Pandas DataFrame: {df}")

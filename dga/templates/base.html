@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    {% block meta %}
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="" />
+    {% endblock %} {% block styles %}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -22,6 +24,8 @@
       crossorigin="anonymous"
     />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {% endblock %}
+
     <title>DGAPUTRA</title>
   </head>
 
@@ -61,32 +65,36 @@
                   Records
                 </a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link fw-semibold" id="navbarPages" href="/graph/">
+                  Graph
+                </a>
+              </li>
             </ul>
 
             <!-- Button -->
-
-            <button class="navbar-btn ms-auto custom-btn">
-              <a href="{{ url_for('authentication.logout') }}" target="_blank">
+            <a href="{{ url_for('authentication.logout') }}" class="ms-auto">
+              <button class="btn navbar-btn custom-btn" type="submit">
                 Sign out
-              </a>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                height="15px"
-                width="15px"
-                class="icon"
-              >
-                <path
-                  stroke-linejoin="round"
-                  stroke-linecap="round"
-                  stroke-miterlimit="10"
-                  stroke-width="1.5"
-                  stroke="#292D32"
-                  d="M8.91016 19.9201L15.4302 13.4001C16.2002 12.6301 16.2002 11.3701 15.4302 10.6001L8.91016 4.08008"
-                ></path>
-              </svg>
-            </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  height="15px"
+                  width="15px"
+                  class="icon"
+                >
+                  <path
+                    stroke-linejoin="round"
+                    stroke-linecap="round"
+                    stroke-miterlimit="10"
+                    stroke-width="1.5"
+                    stroke="#292D32"
+                    d="M8.91016 19.9201L15.4302 13.4001C16.2002 12.6301 16.2002 11.3701 15.4302 10.6001L8.91016 4.08008"
+                  ></path>
+                </svg>
+              </button>
+            </a>
           </div>
         </nav>
       </div>
@@ -94,6 +102,7 @@
 
     <main>{% block content %}{% endblock %}</main>
 
+    {% block scripts %}
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
@@ -103,5 +112,6 @@
     <script>
       var staticUrlPrefix = "{{ url_for('static', filename='') }}";
     </script>
+    {% endblock %}
   </body>
 </html>

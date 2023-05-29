@@ -7,15 +7,12 @@ from flask import (
     flash,
     session,
     Blueprint,
-    current_app as app,
 )
 from flask_mail import Mail, Message
 from dga import db, auth
 import time
-from collections import OrderedDict
 from .auth_utils import login_required
 from .dga_utils import dt1, dt4, dt5, pentagon1, pentagon2
-
 
 rtdatabase = Blueprint("rtdatabase", __name__)
 mail = Mail()
@@ -35,13 +32,12 @@ def home():
     if request.method == "POST":
         if request.form["action"] == "record":
             add_record(user)
-            
+
             # add record to the database
             flash("Record added successfully", "msg")
             return redirect(url_for("rtdatabase.home"))
 
     return render_template("home.html", image_paths=image_paths)
-
 
 
 @rtdatabase.route("/records", methods=["GET", "POST"])  # type: ignore
@@ -60,13 +56,13 @@ def records():
     record_selected = request.args.get("record_name", None)
 
     if record_selected:
-        
         data = (
             db.child("records")
             .child(user["localId"])
             .child(record_selected)
             .child("gaseous_data")
-            .get().val()
+            .get()
+            .val()
         )
 
         acetylene = int(data["acetylene"])
@@ -74,13 +70,13 @@ def records():
         ethylene = int(data["ethylene"])
         hydrogen = int(data["hydrogen"])
         methane = int(data["methane"])
-        
+
         dt1(ethylene, methane, acetylene)
         dt4(methane, hydrogen, ethane)
         dt5(ethylene, methane, ethane)
         pentagon1(ethylene, methane, ethane, hydrogen, acetylene)
         pentagon2(ethylene, methane, ethane, hydrogen, acetylene)
-    
+
     # if request.method == "POST":
     #     if record_selected is None:
     #         flash("Please select a record", "error")
@@ -93,9 +89,9 @@ def records():
     #         flash(f"{record_selected} deleted successfully", "msg")
     #         return redirect(url_for("rtdatabase.records"))
 
-    #     else: 
+    #     else:
     #         query_dict = dict(get_record(user, record_selected))
-            
+
     #         if request.form["action"] == "email":
     #             email = auth.get_account_info(session["idToken"])["users"][0]["email"]
     #             message = Message("Hello", recipients=[email])
@@ -103,7 +99,7 @@ def records():
 
     #             for key, value in query_dict.items():
     #                 message_body += f"{key}: {value}\n"
-                    
+
     #             with app.open_resource("static/images/dt1.png") as fp:
     #                 message.attach("triangle1.png", "image/png", fp.read())
     #             with app.open_resource("static/images/dt4.png") as fp:
@@ -113,10 +109,10 @@ def records():
     #             with app.open_resource("static/images/dp1.png") as fp:
     #                 message.attach("triangle1.png", "image/png", fp.read())
     #             with app.open_resource("static/images/dp2.png") as fp:
-    #                 message.attach("triangle1.png", "image/png", fp.read())                
-                    
+    #                 message.attach("triangle1.png", "image/png", fp.read())
+
     #             message.body = message_body
-                
+
     #             mail.send(message)
     #             flash("Records sent to email", "msg")
 
@@ -165,9 +161,20 @@ def records():
     #             )
 
     return render_template(
-        "records.html", kt=keys_and_timestamps, record_selected=record_selected, image_paths=image_paths
+        "records.html",
+        kt=keys_and_timestamps,
+        record_selected=record_selected,
+        image_paths=image_paths,
     )
-    
+
+
+def get_current_user():
+    try:
+        return auth.get_account_info(session["idToken"])["users"][0]
+    except:
+        flash("Session expired, please login again", "error")
+        return redirect(url_for("authentication.index"))
+
 
 def add_record(user):
     new_tag_no = generate_tag_number(user)
@@ -177,7 +184,7 @@ def add_record(user):
     methane = int(records["methane"])
     acetylene = int(records["acetylene"])
     ethylene = int(records["ethylene"])
-    
+
     dp1 = pentagon1(ethane, hydrogen, acetylene, ethylene, methane)
     dp2 = pentagon2(ethane, hydrogen, acetylene, ethylene, methane)
 
@@ -187,13 +194,13 @@ def add_record(user):
         "fault_type": {
             "dt1": dt1(ethylene, methane, acetylene),
             "dt4": dt4(methane, hydrogen, ethane),
-            "dt5": dt5(ethylene, methane, ethane)
-        }
+            "dt5": dt5(ethylene, methane, ethane),
+        },
     }
 
     # doing ref like this does not work somehow, will instead refresh the path everytime it is called
     # ref = db.child('records').child(user['localId'])
-    
+
     ref_path = db.child("records").child(user["localId"]).get()
 
     # if user (localId) doesn't exist
@@ -208,12 +215,7 @@ def add_record(user):
 def get_record(user, tag_num):
     # if record name is numerical value only, it will return None as key. For more info, see: https://github.com/thisbejim/Pyrebase/issues/131
     record = None
-    record = (
-        db.child("records")
-        .child(user["localId"])
-        .child(tag_num)
-        .get()
-    )
+    record = db.child("records").child(user["localId"]).child(tag_num).get()
 
     return record.val()
 
@@ -230,15 +232,11 @@ def display_records(user):
 
     return keys_and_timestamps
 
-def generate_tag_number(user):
 
+def generate_tag_number(user):
     # get the last tag_no
     max_tag_no = (
-        db.child("records")
-        .child(user["localId"])
-        .order_by_key()
-        .limit_to_last(1)
-        .get()
+        db.child("records").child(user["localId"]).order_by_key().limit_to_last(1).get()
     )
 
     if max_tag_no.val() is None:  # if no records exist
@@ -253,6 +251,7 @@ def generate_tag_number(user):
     print(new_tag_no)
     return new_tag_no
 
+
 def extract_gases(record, data_type):
     gases = {}
     required_gases = {
@@ -265,6 +264,7 @@ def extract_gases(record, data_type):
         gases[gas] = float(record.get(gas, 0))
 
     return gases
+
 
 def get_fault(data_type, tag_num):
     user = auth.get_account_info(session["idToken"])["users"][0]
@@ -281,6 +281,7 @@ def get_fault(data_type, tag_num):
         fault = dt5(gases["ethyleneconc"], gases["methaneconc"], gases["ethaneconc"])
 
     return fault
+
 
 # Note to self:
 # There are 2 ways to pass data in url:
