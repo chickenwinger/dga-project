@@ -104,7 +104,7 @@
     font-weight: 700;
     font-family: var(--ff-primary);
     transition: all .2s;
-    padding: 10px 20px;
+    padding: 6px 18px;
     border-radius: 100px;
     background: var(--clr-accent-400);
     border: 1px solid transparent;
@@ -118,7 +118,7 @@
   }
   
   .record-button > svg {
-    width: 34px;
+    width: 30px;
     margin-left: 10px;
     transition: transform .3s ease-in-out;
   }
@@ -151,9 +151,9 @@
     border: none;
     border-bottom: 2px solid #9b9b9b;
     outline: 0;
-    font-size: 17px;
+    font-size: 14px;
     color: var(--clr-primary-400);
-    padding: 7px 0;
+    padding: 4px 0;
     background: transparent;
     transition: border-color 0.2s;
   }
@@ -163,7 +163,7 @@
   }
   
   .form__field:placeholder-shown ~ .form__label {
-    font-size: 17px;
+    font-size: 14px;
     cursor: text;
     top: 20px;
   }
@@ -173,7 +173,7 @@
     top: 0;
     display: block;
     transition: 0.2s;
-    font-size: 17px;
+    font-size: 14px;
     color: #9b9b9b;
     pointer-events: none;
   }
@@ -191,7 +191,7 @@
     top: 0;
     display: block;
     transition: 0.2s;
-    font-size: 17px;
+    font-size: 14px;
     color: var(--clr-primary-400);
     font-weight: 700;
   }
@@ -200,3 +200,4 @@
   .form__field:required, .form__field:invalid {
     box-shadow: none;
   }
+  
