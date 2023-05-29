@@ -19,7 +19,7 @@ $(function() {
         
         for (var i = 0; i < selectedImages.length; i++) {
             var imageSrc = staticUrlPrefix + "images/" + selectedImages[i];
-            $('#selected-images').append('<img src="' + imageSrc + '"width="500px">');
+            $('#selected-images').append('<img src="' + imageSrc + '" width="450px">');
         }
     });
 });
