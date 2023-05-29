@@ -1,14 +1,10 @@
-import dash
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 from dash import html, dcc
 from .dash import Dash
-import plotly.express as px
-import pandas as pd
 import plotly.graph_objs as go
 
 from .data import create_dataframe
-from flask import current_app
 
 
 def init_dashboard(server):
@@ -17,7 +13,6 @@ def init_dashboard(server):
         server=server,
         routes_pathname_prefix="/graph/",
         external_stylesheets=[
-            "/static/dist/css/styles.css",
             dbc.themes.BOOTSTRAP,
         ],
     )
@@ -80,9 +75,6 @@ def init_dashboard(server):
                         "Drag across the graph to zoom in. Drag across the timeline to jump back/ahead. Double click to reset.",
                         color="info",
                         className="mt-2 text-center",
-                        style={
-                            "display": "inline-block",
-                        },
                     ),
                 ]
             ),
@@ -130,7 +122,7 @@ def init_callbacks(dash_app):
                 showgrid=True,
             ),
             paper_bgcolor=colors["background"],
-            font=dict(color="black", size=15),
+            font=dict(color="black", size=14),
             hovermode="closest",
         )
 
