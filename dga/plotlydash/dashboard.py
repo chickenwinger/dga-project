@@ -29,7 +29,7 @@ def init_dashboard(server):
                 [
                     html.H1(
                         "Graph of Fault Type against Time",
-                        className="text-primary text-center fs-3 fw-3 m-3",
+                        className="text-primary text-center fs-5 fw-3 m-2",
                     )
                 ]
             ),
