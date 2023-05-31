@@ -1,26 +1,139 @@
 {% extends "base.html" %} {% block content %}
-<div class="container-fluid">
+<div class="container">
   <div class="row">
     <!-- Records table -->
 
     <div class="col-3">
-      <div class="h-100">
-        <div class="d-flex flex-column h-100 position-relative">
+      <div class="">
+        <div class="d-flex flex-column position-relative">
           <div class="hide-scrollbar">
             <div class="container py-3">
-              <div class="mb-3"><h3 class="fw-semibold m-0">Records</h3></div>
+              <div class="mb-3">
+                <h3 class="fw-semibold mb-2 text-uppercase">Records</h3>
+                <!-- Transformer selection dropdown -->
+
+                <div class="btn-group">
+                  <button
+                    class="btn btn-outline-primary btn-sm dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    Select transformer
+                  </button>
+
+                  <ul class="dropdown-menu">
+                    {% if transformers != None %} {% for transformer in
+                    transformers %}
+
+                    <li>
+                      <a
+                        class="dropdown-item"
+                        href="{{ url_for('rtdatabase.records', transformer_selected=transformer) }}"
+                        name="{{ transformer }}"
+                        >{{ transformer }}<i
+                          class="bi bi-trash3"
+                          style="color: red"
+                        ></i
+                      ></a>
+                    </li>
+
+                    {% endfor %} {% endif %}
+                    <li><hr class="dropdown-divider" /></li>
+                    <li>
+                      <button
+                        type="button"
+                        class="dropdown-item"
+                        data-bs-toggle="modal"
+                        data-bs-target="#transformerModal"
+                      >
+                        Add a new transformer
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
 
               <!-- Card list -->
 
-              <form action="" method="POST">
-                <div class="card-list px-2">
-                  {% for key, timestamp in kt.items() %} {% if key == "No
+              <form
+                class=""
+                action=""
+                method="POST"
+                autocomplete="off"
+                style="
+                  height: calc(100vh - 195px);
+                  display: flex;
+                  overflow: hidden;
+                "
+              >
+                <!-- Tranformer Modal -->
+
+                <div
+                  class="modal fade"
+                  id="transformerModal"
+                  tabindex="-1"
+                  aria-labelledby="exampleModalLabel"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">
+                          Add a new transformer
+                        </h1>
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="mb-3">
+                          <label for="transformer-name" class="col-form-label"
+                            >Name:</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="transformer"
+                            id="transformer-name"
+                            required
+                          />
+                        </div>
+                      </div>
+
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          Close
+                        </button>
+                        <button
+                          class="btn btn-primary"
+                          name="action"
+                          value="add"
+                          id="add-new-transformer"
+                        >
+                          Add
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Record List  -->
+
+                <div class="card-list px-3 scrollable-area" id="record-list">
+                  {# {% for key, timestamp in kt.items() %} {% if key == "No
                   records found" %} <em>No records found</em>
                   {% else %}
                   <a
                     href="{{ url_for('rtdatabase.records', record_name=key) }}"
                     class="card mb-2 link-underline link-underline-opacity-0"
-                    {% if key == record_selected %} style="border: 1px solid rgb(102, 102, 102);" {% endif %}
                     name="{{ key }}"
                     aria-current="true"
                   >
@@ -33,7 +146,7 @@
                       </small>
                     </div>
                   </a>
-                  {% endif %} {% endfor %}
+                  {% endif %} {% endfor %} #}
                 </div>
               </form>
             </div>
@@ -47,14 +160,13 @@
     <div class="col-9">
       <form
         class="d-flex justify-content-evenly align-items-center m-4"
-        action=""
         id="image-form"
       >
+        <!-- DGA selection -->
+
         <span class="text-nowrap fw-semibold">Select two tools:</span>
 
         {% for image in image_paths %}
-
-        <!-- DGA selection -->
 
         <div class="form-check">
           <input

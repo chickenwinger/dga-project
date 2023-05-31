@@ -201,3 +201,13 @@
     box-shadow: none;
   }
   
+  .scrollable-area {
+    flex: 1; /* Allow the content to expand and fill the container */
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding-right: 15px; /* Add some space to prevent the content from touching the edge */
+    margin-right: -15px; /* Counteract the padding */
+  }
+
+  .card.selected {
+    border: 1px solid rgb(102, 102, 102);
+  }

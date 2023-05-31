@@ -1,5 +1,6 @@
 from flask import (
     Flask,
+    jsonify,
     render_template,
     url_for,
     request,
@@ -28,16 +29,24 @@ def home():
         return redirect(url_for("authentication.index"))
 
     image_paths = ["dt1", "dt4", "dt5", "dp1", "dp2"]
+    transformers = []
+
+    transformers_path = db.child("records").child(user["localId"]).get()
+    if transformers_path.val() is not None:
+        for transformer in transformers_path.each():
+            transformers.append(transformer.key())
 
     if request.method == "POST":
-        if request.form["action"] == "record":
-            add_record(user)
+        if request.form["transformerRadio"] != "":
+            add_record(user, request.form["transformerRadio"])
 
             # add record to the database
             flash("Record added successfully", "msg")
             return redirect(url_for("rtdatabase.home"))
 
-    return render_template("home.html", image_paths=image_paths)
+    return render_template(
+        "home.html", image_paths=image_paths, transformers=transformers
+    )
 
 
 @rtdatabase.route("/records", methods=["GET", "POST"])  # type: ignore
@@ -50,32 +59,62 @@ def records():
         return redirect(url_for("authentication.index"))
 
     image_paths = ["dt1", "dt4", "dt5", "dp1", "dp2"]
+    transformers = []
 
-    keys_and_timestamps = display_records(user)
-    # print(keys_and_timestamps)
-    record_selected = request.args.get("record_name", None)
+    transformers_path = db.child("records").child(user["localId"]).get()
+    if transformers_path.val() is not None:
+        for transformer in transformers_path.each():
+            transformers.append(transformer.key())
 
-    if record_selected:
-        data = (
-            db.child("records")
-            .child(user["localId"])
-            .child(record_selected)
-            .child("gaseous_data")
-            .get()
-            .val()
-        )
+    if request.method == "POST":
+        action = request.form.get("type", None)
+        transformer_selected = request.form.get("transformer_selected", None)
+        print(action)
+        print(transformer_selected)
 
-        acetylene = int(data["acetylene"])
-        ethane = int(data["ethane"])
-        ethylene = int(data["ethylene"])
-        hydrogen = int(data["hydrogen"])
-        methane = int(data["methane"])
+        if request.form.get("action") == "add":
+            transformer_name = request.form.get("transformer", None)
+            print(transformer_name)
 
-        dt1(ethylene, methane, acetylene)
-        dt4(methane, hydrogen, ethane)
-        dt5(ethylene, methane, ethane)
-        pentagon1(ethylene, methane, ethane, hydrogen, acetylene)
-        pentagon2(ethylene, methane, ethane, hydrogen, acetylene)
+            if transformers_path is None:
+                db.child("records").child(user["localId"]).set({transformer_name: ""})
+            else:
+                db.child("records").child(user["localId"]).child(transformer_name).set(
+                    ""
+                )
+
+            return redirect(url_for("rtdatabase.records"))
+
+        elif action == "update":
+            record_selected = request.form.get("record_selected", None)
+
+            keys_and_timestamps = display_records(user, transformer_selected)
+            print(keys_and_timestamps)
+
+            if record_selected:
+                data = (
+                    db.child("records")
+                    .child(user["localId"])
+                    .child(transformer_selected)
+                    .child(record_selected)
+                    .child("gaseous_data")
+                    .get()
+                    .val()
+                )
+
+                acetylene = int(data["acetylene"])
+                ethane = int(data["ethane"])
+                ethylene = int(data["ethylene"])
+                hydrogen = int(data["hydrogen"])
+                methane = int(data["methane"])
+
+                dt1(ethylene, methane, acetylene)
+                dt4(methane, hydrogen, ethane)
+                dt5(ethylene, methane, ethane)
+                pentagon1(ethylene, methane, ethane, hydrogen, acetylene)
+                pentagon2(ethylene, methane, ethane, hydrogen, acetylene)
+
+            return jsonify({"kt": keys_and_timestamps})
 
     # if request.method == "POST":
     #     if record_selected is None:
@@ -162,9 +201,8 @@ def records():
 
     return render_template(
         "records.html",
-        kt=keys_and_timestamps,
-        record_selected=record_selected,
         image_paths=image_paths,
+        transformers=transformers,
     )
 
 
@@ -176,21 +214,37 @@ def get_current_user():
         return redirect(url_for("authentication.index"))
 
 
-def add_record(user):
-    new_tag_no = generate_tag_number(user)
+def get_transformer_data(user, transformer):
+    path = db.child("records").child(user["localId"]).child("transformers").get()
+
+    return path
+
+
+def add_record(user, transformer):
+    new_tag_no = generate_tag_number(user, transformer)
     records = request.form.to_dict()
     ethane = int(records["ethane"])
     hydrogen = int(records["hydrogen"])
     methane = int(records["methane"])
     acetylene = int(records["acetylene"])
     ethylene = int(records["ethylene"])
+    cmonoxide = int(records["cmonoxide"])
+    cdioxide = int(records["cdioxide"])
 
     dp1 = pentagon1(ethane, hydrogen, acetylene, ethylene, methane)
     dp2 = pentagon2(ethane, hydrogen, acetylene, ethylene, methane)
 
     data = {
         "timestamp": time.time(),  # firebase.database.ServerValue.TIMESTAMP,
-        "gaseous_data": records,
+        "gaseous_data": {
+            "hydrogen": hydrogen,
+            "methane": methane,
+            "acetylene": acetylene,
+            "ethylene": ethylene,
+            "ethane": ethane,
+            "cmonoxide": cmonoxide,
+            "cdioxide": cdioxide,
+        },
         "fault_type": {
             "dt1": dt1(ethylene, methane, acetylene),
             "dt4": dt4(methane, hydrogen, ethane),
@@ -201,28 +255,26 @@ def add_record(user):
     # doing ref like this does not work somehow, will instead refresh the path everytime it is called
     # ref = db.child('records').child(user['localId'])
 
-    ref_path = db.child("records").child(user["localId"]).get()
+    ref_path = db.child("records").child(user["localId"]).child(transformer).get()
 
     # if user (localId) doesn't exist
     if ref_path.val() is None:
-        db.child("records").child(user["localId"]).set({new_tag_no: data})
+        db.child("records").child(user["localId"]).child(transformer).set(
+            {new_tag_no: data}
+        )
     # for new record
     else:
         print("Successfully added record")
-        db.child("records").child(user["localId"]).child(new_tag_no).set(data)
+        db.child("records").child(user["localId"]).child(transformer).child(
+            new_tag_no
+        ).set(data)
 
 
-def get_record(user, tag_num):
-    # if record name is numerical value only, it will return None as key. For more info, see: https://github.com/thisbejim/Pyrebase/issues/131
-    record = None
-    record = db.child("records").child(user["localId"]).child(tag_num).get()
-
-    return record.val()
-
-
-def display_records(user):
+def display_records(user, transformer):
     try:
-        all_records = db.child("records").child(user["localId"]).get()
+        all_records = (
+            db.child("records").child(user["localId"]).child(transformer).get()
+        )
         keys = [record.key() for record in all_records.each()]  # type: ignore
         timestamps = [time.ctime(record.val()["timestamp"]) for record in all_records.each()]  # type: ignore
 
@@ -233,54 +285,27 @@ def display_records(user):
     return keys_and_timestamps
 
 
-def generate_tag_number(user):
+def generate_tag_number(user, transformer):
     # get the last tag_no
     max_tag_no = (
-        db.child("records").child(user["localId"]).order_by_key().limit_to_last(1).get()
+        db.child("records")
+        .child(user["localId"])
+        .child(transformer)
+        .order_by_key()
+        .limit_to_last(1)
+        .get()
     )
 
     if max_tag_no.val() is None:  # if no records exist
         print("No records exist")
         new_tag_no = "DGA" + "0001"
     else:
-        print("Records exist")
         current_max_tag_no = list(max_tag_no.val().keys())[0]  # type: ignore
         print(current_max_tag_no)
         new_tag_no = "DGA" + str(int(current_max_tag_no[3:]) + 1).zfill(4)
 
     print(new_tag_no)
     return new_tag_no
-
-
-def extract_gases(record, data_type):
-    gases = {}
-    required_gases = {
-        "dt1": ["ethyleneconc", "methaneconc", "acetyleneconc"],
-        "dt4": ["methaneconc", "hydrogenconc", "ethaneconc"],
-        "dt5": ["ethyleneconc", "methaneconc", "ethaneconc"],
-    }
-
-    for gas in required_gases[data_type]:
-        gases[gas] = float(record.get(gas, 0))
-
-    return gases
-
-
-def get_fault(data_type, tag_num):
-    user = auth.get_account_info(session["idToken"])["users"][0]
-    record = dict(get_record(user, data_type, tag_num))  # type: ignore
-    fault = None
-
-    gases = extract_gases(record, data_type)
-
-    if data_type == "dt1":
-        fault = dt1(gases["ethyleneconc"], gases["methaneconc"], gases["acetyleneconc"])
-    elif data_type == "dt4":
-        fault = dt4(gases["methaneconc"], gases["hydrogenconc"], gases["ethaneconc"])
-    elif data_type == "dt5":
-        fault = dt5(gases["ethyleneconc"], gases["methaneconc"], gases["ethaneconc"])
-
-    return fault
 
 
 # Note to self:

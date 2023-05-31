@@ -95,7 +95,7 @@ def init_callbacks(dash_app):
         df = create_dataframe()
 
         # Filter the DataFrame based on the selected fault type
-        filtered_df = df[["Timestamp", "Fault Type ({})".format(value)]]
+        filtered_graph = df[["Timestamp", "Fault Type ({})".format(value)]]
 
         colors = {"background": "hsl(279, 100%, 97%)", "text": "#7FDBFF"}
 
@@ -103,10 +103,30 @@ def init_callbacks(dash_app):
         fig = go.Figure()
         fig.add_trace(
             go.Scatter(
-                x=filtered_df["Timestamp"],
-                y=filtered_df["Fault Type ({})".format(value)],
+                x=filtered_graph["Timestamp"],
+                y=filtered_graph["Fault Type ({})".format(value)],
                 mode="markers",
                 name="Fault Type",
+                hovertemplate="Record: %{customdata[0]}<br>"
+                + "Acetylene: %{customdata[1]}%<br>"
+                + "Hydrogen: %{customdata[2]}%<br>"
+                + "Methane: %{customdata[3]}%<br>"
+                + "Ethylene: %{customdata[4]}%<br>"
+                + "Ethane: %{customdata[5]}%<br>"
+                + "Carbon dioxide: %{customdata[6]}%<br>"
+                + "Carbon monoxide: %{customdata[7]}%<br>",
+                customdata=df[
+                    [
+                        "Record",
+                        "Acetylene",
+                        "Hydrogen",
+                        "Methane",
+                        "Ethylene",
+                        "Ethane",
+                        "Carbon dioxide",
+                        "Carbon monoxide",
+                    ]
+                ].values,
             )
         )
 

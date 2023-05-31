@@ -111,8 +111,16 @@
 
     <!-- Record button -->
 
-    <div class="align-self-center">
-      <button class="record-button" id="" name="action" value="record">
+    <div class="align-self-center position-relative">
+      <button
+        class="record-button"
+        type="button"
+        data-bs-toggle="modal"
+        data-bs-target="#recordModal"
+        id=""
+        name="action"
+        value="record"
+      >
         <span class="text-nowrap">Add record</span>
         <svg
           width="34"
@@ -134,20 +142,26 @@
           ></path>
         </svg>
       </button>
+
+      {% include 'modal.html' %}
+      <!-- flash messages -->
+
+      <div
+        class="position-absolute top-50 start-100 translate-middle text-nowrap offset-10"
+      >
+        {% include 'flash_messages.html' %}
+      </div>
     </div>
   </form>
-
-  <!-- flash messages -->
-  <div class="ms-2 mb-0" style="height: 24px">
-    {% include 'flash_messages.html' %}
-  </div>
 
   <form
     class="d-flex justify-content-evenly align-items-center m-1"
     action=""
     id="image-form"
   >
-    <span class="text-nowrap fw-semibold">Select two tools:</span>
+    <span class="text-nowrap fw-semibold"
+      >Display two tools of the latest record:</span
+    >
 
     {% for image in image_paths %}
 
