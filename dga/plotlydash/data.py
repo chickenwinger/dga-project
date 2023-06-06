@@ -1,11 +1,8 @@
 from flask import current_app
 import pandas as pd
-
+import json
 from dga import db
 from dga.rtdatabase import get_current_user
-
-transformer_list = []
-
 
 def create_dataframe():
     with current_app.app_context():
@@ -13,22 +10,21 @@ def create_dataframe():
 
         all_records = db.child("records").child(user["localId"]).get()
 
+        transformer_list = []
         timestamp_list = []
         fault_type_list = []
         record_tag_list = []
         gaseous_list = []
 
         for record in all_records.each():
-            global transformer_list
-            transformer_list.append(record.key())
-            print(transformer_list)
-
             inner_record = (
                 db.child("records").child(user["localId"]).child(record.key()).get()
             )
 
             if inner_record.each() is not None:
                 for data in inner_record.each():
+                    transformer_list.append(record.key())
+                    print(transformer_list)
                     record_tag_list.append(data.key())
 
                     timestamp = pd.to_datetime(data.val()["timestamp"], unit="s")
@@ -61,7 +57,7 @@ def create_dataframe():
                 "Ethane": [gas[3] for gas in gaseous_list],
                 "Ethylene": [gas[4] for gas in gaseous_list],
                 "Hydrogen": [gas[5] for gas in gaseous_list],
-                "Methane": [gas[6] for gas in gaseous_list],
+                "Methane": [gas[6] for gas in gaseous_list]
             }
         )
 

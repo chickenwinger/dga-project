@@ -34,9 +34,9 @@ def init_dashboard(server):
                     dcc.Dropdown(
                         id="fault-type-dropdown",
                         options=[
-                            {"label": "DT1", "value": "dt1"},
-                            {"label": "DT4", "value": "dt4"},
-                            {"label": "DT5", "value": "dt5"},
+                            {"label": "TX1", "value": "dt1"},
+                            {"label": "TX1", "value": "dt4"},
+                            {"label": "TX1", "value": "dt5"},
                         ],
                         value="dt1",
                         clearable=False,
@@ -135,8 +135,8 @@ def init_callbacks(dash_app):
         )
 
         fig.update_layout(
-            xaxis_title="Time",
-            yaxis_title="Fault Type",
+            xaxis_title="Date ({})".format(value),
+            yaxis_title="Gas Concentration ()",
             xaxis=dict(
                 showline=True,
                 showgrid=True,
