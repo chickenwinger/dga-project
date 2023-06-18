@@ -57,22 +57,20 @@ def create_dataframe():
                 "Gas Concentration (Ethylene)": [gas[4] for gas in gaseous_list],
                 "Gas Concentration (Hydrogen)": [gas[5] for gas in gaseous_list],
                 "Gas Concentration (Methane)": [gas[6] for gas in gaseous_list],
-                "Date (January)": [ts.dt for ts in timestamp_list if ts.month == 1],
-                "Date (February)": [ts.dt for ts in timestamp_list if ts.month == 2],
-                "Date (March)": [ts.dt for ts in timestamp_list if ts.month == 3],
-                "Date (April)": [ts.dt for ts in timestamp_list if ts.month == 4],
-                "Date (May)": [ts.dt for ts in timestamp_list if ts.month == 5],
-                "Date (June)": [ts.dt for ts in timestamp_list if ts.month == 6],
-                "Date (July)": [ts.dt for ts in timestamp_list if ts.month == 7],
-                "Date (August)": [ts.dt for ts in timestamp_list if ts.month == 8],
-                "Date (September)": [ts.dt for ts in timestamp_list if ts.month == 9],
-                "Date (October)": [ts.dt for ts in timestamp_list if ts.month == 10],
-                "Date (November)": [ts.dt for ts in timestamp_list if ts.month == 11],
-                "Date (December)": [ts.dt for ts in timestamp_list if ts.month == 12]
+                "Date (January)": [ts for ts in timestamp_list if ts.month == 1],
+                "Date (February)": [ts for ts in timestamp_list if ts.month == 2],
+                "Date (March)": [ts for ts in timestamp_list if ts.month == 3],
+                "Date (April)": [ts for ts in timestamp_list if ts.month == 4],
+                "Date (May)": [ts for ts in timestamp_list if ts.month == 5],
+                "Date (June)": [ts for ts in timestamp_list if ts.month == 6],
+                "Date (July)": [ts for ts in timestamp_list if ts.month == 7],
+                "Date (August)": [ts for ts in timestamp_list if ts.month == 8],
+                "Date (September)": [ts for ts in timestamp_list if ts.month == 9],
+                "Date (October)": [ts for ts in timestamp_list if ts.month == 10],
+                "Date (November)": [ts for ts in timestamp_list if ts.month == 11],
+                "Date (December)": [ts for ts in timestamp_list if ts.month == 12]
             }
         )
-
-        df_new = df._append()
 
         print(df)
 
