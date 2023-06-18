@@ -32,7 +32,7 @@ def init_dashboard(server):
         mth = 0
         while mth < 12:
             month_name = calendar.month_name[mth+1]
-            month_dropdown.append({"label": month_name, "value": month_name})
+            month_dropdown.append({"label": month_name, "value": mth+1})
             mth += 1
         return month_dropdown
 
@@ -83,7 +83,7 @@ def init_dashboard(server):
                     #     {"label": "December", "value": "12"},
                     # ],
                     options=init_month_list(),
-                    value=init_month_list()[0]["value"],
+                    value=init_month_list()[5]["value"],
                     clearable=False,
                     style={
                         "width": "50%",
@@ -169,11 +169,18 @@ def init_callbacks(dash_app):
     )
     def update_output(tx_dropdown, month_dropdown, gas_dropdown):
         df = create_dataframe()
-        print(month_dropdown)
-        print(gas_dropdown)
         # Filter the DataFrame based on the selected fault type
-        filtered_graph = df["Date ({})".format(month_dropdown), "Gas Concentration ({})".format(gas_dropdown)]
+        filtered_graph = df[["Transformer", "Timestamp", "Gas Concentration ({})".format(gas_dropdown)]]
         # filtered_graph = df.loc[:, ["Date ({})".format(month_dropdown), "Gas Concentration ({})".format(gas_dropdown)]]
+
+        print(filtered_graph)
+        for i in range(0, len(filtered_graph)):
+            if filtered_graph.at[i, "Transformer"] != tx_dropdown:
+                filtered_graph.drop([i], inplace=True)
+                continue
+            if filtered_graph.at[i, "Timestamp"].month != month_dropdown:
+                filtered_graph.drop([i], inplace=True)
+                continue
 
         colors = {"background": "hsl(279, 100%, 97%)", "text": "#7FDBFF"}
 
@@ -181,8 +188,8 @@ def init_callbacks(dash_app):
         fig = go.Figure()
         fig.add_trace(
             go.Scatter(
-                x=filtered_graph["Date ({})".format(month_dropdown)],
-                y=filtered_graph["Gas Concentration ({})".format(month_dropdown)],
+                x=filtered_graph["Timestamp"],
+                y=filtered_graph["Gas Concentration ({})".format(gas_dropdown)],
                 mode="markers",
                 name="Fault Type",
                 # hovertemplate="Record: %{customdata[0]}<br>"
@@ -213,7 +220,7 @@ def init_callbacks(dash_app):
         )
 
         fig.update_layout(
-            xaxis_title="Date ({})".format(month_dropdown),
+            xaxis_title="Timestamp",
             yaxis_title="Gas Concentration ({})".format(gas_dropdown),
             xaxis=dict(
                 showline=True,
