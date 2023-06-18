@@ -16,6 +16,7 @@ def create_dataframe():
         record_tag_list = []
         gaseous_list = []
 
+        # [TX1, TX2, TX3, TX4, TX5]
         for record in all_records.each():
             inner_record = (
                 db.child("records").child(user["localId"]).child(record.key()).get()
@@ -45,19 +46,16 @@ def create_dataframe():
 
         df = pd.DataFrame(
             {
-                "Transformer": transformer_list,
+                "transformerList": all_records,
+                "transformerKey": transformer_list,
                 "Record": record_tag_list,
-                "Timestamp": timestamp_list,
-                "Fault Type (dt1)": [fault[0] for fault in fault_type_list],
-                "Fault Type (dt4)": [fault[1] for fault in fault_type_list],
-                "Fault Type (dt5)": [fault[2] for fault in fault_type_list],
                 "Acetylene": [gas[0] for gas in gaseous_list],
                 "Carbon dioxide": [gas[1] for gas in gaseous_list],
                 "Carbon monoxide": [gas[2] for gas in gaseous_list],
                 "Ethane": [gas[3] for gas in gaseous_list],
                 "Ethylene": [gas[4] for gas in gaseous_list],
                 "Hydrogen": [gas[5] for gas in gaseous_list],
-                "Methane": [gas[6] for gas in gaseous_list]
+                "Methane": [gas[6] for gas in gaseous_list],
             }
         )
 
