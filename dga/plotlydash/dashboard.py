@@ -172,7 +172,7 @@ def init_callbacks(dash_app):
         # Filter the DataFrame based on the selected fault type
         filtered_graph = df[["Transformer", "Date", "Gas Concentration % ({})".format(gas_dropdown)]]
         # filtered_graph = df.loc[:, ["Date ({})".format(month_dropdown), "Gas Concentration ({})".format(gas_dropdown)]]
-
+        # testttt
         print(filtered_graph)
         for i in range(0, len(filtered_graph)):
             if filtered_graph.at[i, "Transformer"] != tx_dropdown:
