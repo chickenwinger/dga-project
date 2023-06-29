@@ -29,16 +29,17 @@
     <title>DGAPUTRA</title>
 </head>
 
-<body class="vh-100" style="background-color: hsl(279, 100%, 97%)">
+<body class="vh-100" style="background-color: white">
 <header id="header" class="header d-flex align-items-center">
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light">
             <!-- Brand -->
             <a
                     href="{{ url_for('rtdatabase.home') }}"
-                    class="navbar-brand me-auto"
+                    class="navbar-brand me-auto d-flex"
             >
-                <h2 class="fw-bold" style="color: hsl(265, 44%, 39%)">DGA Putra</h2>
+                <img src="static/images/upm-logo.png" width="100em" alt="" />
+                <h2 class="fw-bold mx-3" style="color: #bc2128">DGA Putra</h2>
             </a>
 
             <!-- Collapse -->
@@ -80,25 +81,12 @@
                     </li>
                 </ul>
                 <!-- Sign Out Button -->
-                <a href="{{ url_for('authentication.logout') }}" class="ms-auto">
+                <a href="{{ url_for('authentication.logout') }}" class="ms-auto" >
                     <button class="btn navbar-btn custom-btn" type="submit">
                         Sign out
-                        <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                height="15px"
-                                width="15px"
-                                class="icon"
-                        >
-                            <path
-                                    stroke-linejoin="round"
-                                    stroke-linecap="round"
-                                    stroke-miterlimit="10"
-                                    stroke-width="1.5"
-                                    stroke="#292D32"
-                                    d="M8.91016 19.9201L15.4302 13.4001C16.2002 12.6301 16.2002 11.3701 15.4302 10.6001L8.91016 4.08008"
-                            ></path>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="0.5em" viewBox="0 0 384 512" class="icon">
+                            <style>svg{fill:#bc2128}</style>
+                            <path d="M3.4 81.7c-7.9 15.8-1.5 35 14.3 42.9L280.5 256 17.7 387.4C1.9 395.3-4.5 414.5 3.4 430.3s27.1 22.2 42.9 14.3l320-160c10.8-5.4 17.7-16.5 17.7-28.6s-6.8-23.2-17.7-28.6l-320-160c-15.8-7.9-35-1.5-42.9 14.3z"/>
                         </svg>
                     </button>
                 </a>
